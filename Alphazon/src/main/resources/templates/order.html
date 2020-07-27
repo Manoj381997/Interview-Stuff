@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Home</title>
+</head>
+<body>
+<div th:replace="/header :: header"></div>
+<div class="container">
+	<h2 th:text=${restaurant.name}></h2>
+	<form method="post"
+		th:action="@{/submitOrder(name=${restaurant.name})}">
+		<input type="text" th:name="name" th:value="${restaurant.name}"
+			disabled /> <input type="text" th:name="dishName"
+			th:value="${restaurant.dishName}" disabled /> <input type="text"
+			th:name="price" th:value="${restaurant.price}" disabled /> <input
+			type="number" th:name="quantity" />
+		<button type="submit" name="submit" class="btn btn-info btn-sm">Order</button>
+	</form>
+</div>
+</body>
+</html>
