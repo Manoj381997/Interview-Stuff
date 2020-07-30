@@ -1,0 +1,129 @@
+// JSON Path -> Jaymay
+
+$		-- Is the root element
+
+2)
+{
+	"name": "manoj",							// To get name --> $.name
+	"age": 10
+}
+
+
+
+3) 
+{
+	"name": "manoj",							// To get google's package --> $.jobs[1].package
+	"age": 10,
+	"jobs": [
+		{
+			"company": "amazon",				// To get google's package if we dont know the index --> $.jobs[?(@.company == "google")].package
+			"package": 30
+		},
+		{
+			"company": "google",
+			"package": 40
+		},
+		{
+			"company": "paypal",
+			"package": 25
+		}
+}
+
+3)													// To get list length					--> 		$.length()		--> 6
+
+[
+ 1,													// To get elements greater than 20     -->			$[?( @ > 20 )]
+ 30,
+ 22,												// To get elements within range		   -->			$[0:3]
+ 73,
+ 374,												// To get elements within range with step --> 		$[0:8:2]
+ 5													// get last element, 					-->			$[-1]	(but doesnt not work for certain implementations)
+]																												so use $[-1:0]   (OR)	$[-1:]
+													// To get last 3 elements				--> 		$[-3:]
+
+similarly --> @ == 40, @ != 40 			// @ represents each element
+@ in [40, 24, 25]						// @ in numbers which are either 40, 43, 45
+@ nin [40, 43, 45]
+
+
+4) To get all colors
+{
+	"car": {
+		"color": "blue",				// Getting car color --> $.car.color
+		"price": 200
+	},
+	"bike": {
+		"color": "black",
+		"price": 200
+	}
+}
+
+-- $.*.color	-->  [blue, black]		$.*.price	(For all prices)		// Wildcard
+
+5) List
+[
+	{
+		"model": "shushduh775",				// To get all wheel models --> 		$[*].model
+		"location": "front-right"
+	},
+	{
+		"model": "shushduh775",
+		"location": "rear-right"
+	},
+	{
+		"model": "shushduh775",
+		"location": "front-left"
+	},
+	{
+		"model": "shushduh775",
+		"location": "rear-left"
+	}
+]
+
+6) 
+{
+	"car": {
+		"color": "pink",									// To get all models of car -->		$.car.wheels[*].model
+		"price": 30,
+		"wheels": [
+			{												// Get length of wheels list -->	$.car.wheels.length()	--> 2
+				"model": "XGSHJ%^&"
+			},
+			{
+				"model": "XGSHJ%^&"
+			}
+		]
+	},
+	"bike": {
+		"color": "red",
+		"price": 20,
+		"wheels": [
+			{
+				"model": "XGSHJ%^&"
+			},
+			{
+				"model": "XGSHJ%^&"							// To get all models of wheels -->		$.*.wheels[*].model
+			}
+		]
+	}
+}
+
+
+JSONPath
+
+import com.jayway.jsonpath.JsonPath;
+
+
+public Object getFormatedResponse(String jsonExpression, Class<?> classType) throws JsonProcessingException {
+		CountryResponse response = invoker.getCountryInfo();
+		String jsonResponse = mapper.writeValueAsString(response);
+		Object countryResponse = JsonPath.parse(jsonResponse).read(jsonExpression, classType);
+		return countryResponse;
+	}
+
+
+@GetMapping("/getCountryNames")
+	public List<String> getCountryNames() throws JsonProcessingException {
+		String expression = "$.Countries[*].Country";
+		return (List<String>) service.getFormatedResponse(expression, List.class);
+	}

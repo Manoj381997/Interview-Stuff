@@ -1,0 +1,52 @@
+// Why we need an constructor() inside an abstract class, if we can't instantiate abstract class
+
+
+Eg)
+abstract class Abdemo {
+	int i;
+	int j;
+	
+	Abdemo(int i, int j) {
+		this.i = i;
+		this.j = j;
+	}
+}
+
+class Demo extends Abdemo {
+	int k;
+	int m;
+	
+	Demo(int i, int j, int k, int m) {
+		super(i, j);
+		this.k = k
+		this.m = m
+	}
+
+	p s v main(String args[]) {
+		Demo d = new Demo(1,2,3,4);
+	}
+}
+
+So If there are common properties for many classes which inherit Abstract class, then they can use like this rather than instantiating individually
+
+// Java Reflection
+	Java Reflection is a process of examining or modifying the run time behavior of a class at run time.
+	The java.lang.Class class provides many methods that can be used to get metadata, examine and change the run time behavior of a class.
+
+
+
+// Java 8
+
+
+// 3 types of Interface
+1) Normal interface (Interface with multiple methods)
+2) Marker interface (Interface without any method like Serializable, cloneable)
+3) SAM Interface (Single Abstract Method Interface) (a.k.a Functional Interface)
+
+
+// stream() - lazy evaluation
+1) Intermediate methods
+2) Terminate Methods (filter)
+
+filter() and map() are lazy methods/lazy evaluation
+findFirst(), findLast() are Terminal method/function

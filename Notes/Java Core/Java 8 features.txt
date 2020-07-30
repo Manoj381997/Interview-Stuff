@@ -1,0 +1,106 @@
+// Java 8 Features
+(Refre telusko videos)
+1) Interfaces
+	
+	Functional Interfaces (refer, Javatpoint)
+	An Interface that contains exactly one abstract method is known as functional interface. It can have any number of default, static methods but can contain only one abstract method. It can also "declare" methods of object class but shud not define them.
+	eg)
+	@FunctionalInterface  
+	interface sayable{  
+		void say(String msg);   // abstract method  
+		// It can contain any number of Object class methods.  
+		int hashCode();  
+		String toString();  
+		boolean equals(Object obj);  
+	}  
+	--> Invalid functional Interface
+		A functional interface can extends another interface only when it does not have any abstract method.
+
+Why we should not modify Java Interfaces once they are published??
+If we change or add anything new in interface, it will show error in classes which are not overriding that mthd. So rather than declaring, we can make use of default mthd I mean defining a mthd would eradicate that prbm
+		
+-- Default and Static methods
+If 2 interfaces have same method defined and if we implement both of them in a class
+
+interface A {								interface B {
+	default void show() {						default void show() {
+		sysout("hi");								sysout("hello");
+	}											}
+}											}
+class C implements A, B {
+	public void show() {		// It is our responsibility to define in C class if not it will be unambiguous
+	}
+}
+
+// Note: In case if we extend a class I and an interface A where both has the same method defined. Class will have higher priority over Interface
+class C extends I implements A {		// If both has defined same method, then when we call using C class instance, it will get it from I class since Class higher priority over I/F
+}
+
+It comes under a topic called "Third Rules" Of Java
+
+Note:
+Also inside interface we cannot define equals() mthd which returns boolean and accepts Object arg is not allowed, since it is available in Object class method
+interface A {
+	default boolean equals(Object obj) {			// Not allowed, throws compile Time error
+		return true/false;
+	}
+}
+
+// for static methods no need of creating instances, just invoke using class Name
+
+2) forEach method and Lambda Expressions (a.k.a. internal loop)
+
+	ForEach signature in Iterable interface
+	-->	default void forEach(Consumer<super T>action)  
+	ForEachOrdered mthd --> It is used to iterate elements in the order specified by the stream.
+		void forEachOrdered(Consumer<? super T> action)
+		list.stream().parallel().forEachOrdered(games -> System.out.println(games));
+eg)
+List<Integer> li = Arrays.asList([1,2,3,4,5]);
+
+li.forEach(i -> sysout(i));
+li.forEach(System.out::println());
+
+eg) 
+interface A {											// for parameterized methods
+	void show();										void show(String name);
+}
+
+class C {
+	psvm(String[] args) {
+		A a = () -> sysout("Hi");						A a = (String name) -> sysout("Hi "+ name);		// Also no need of providing Data types in brackets
+		a.show("Manoj");
+	}
+}
+
+Note: The above is also called Consumer interface
+In order to work with forEach, a Consumer object is needed. Lambda Expressions are used in Functional Interfaces
+Consumer Interface has one method in it, accept. The way forEach works is like it takes one element at a time and passes it to accept method
+
+3) Stream API	(We cannot reuse stream values) (Lazy evaluation)
+	-- li.stream().forEach(System.out::println);
+	-- li.parallelStream().forEach(System.out::println);
+	-- 
+		Intermediate mthds -> map(), filter()
+		Terminate Methods --> findFirst(), forEach()
+			Optional methods -> findFirst().orElse(0)
+If we use same stream() 2 times it will throw Exception.
+li.forEach(System.out::println());	// works
+li.forEach(System.out::println());	// Exception
+
+Stream is intended to process data, not to store
+
+4) Data Time API
+LocalDate class
+LocalDate d = LocalDate.now(); sysout(d);				// gives todays date alone
+LocalDate d = LocalDate.of(2000, 8, 22);				// Either this
+			= LocalDate.of(2000, Month.AUGUST, 22);		// Or this , (**Recommended)	Month is an ENUM
+LocalTime t = LocalTime.now();
+
+5) Method reference (Call by method)
+list.forEach(System.out::println);
+
+1) Reference to a static method.	--> ContainingClass::staticMethodName  
+2) Reference to an instance method. --> containingObject::instanceMethodName  
+3) Reference to a constructor.		--> ClassName::new
+

@@ -1,0 +1,549 @@
+// JavaScript
+
+It is a lightweight(simple), interpreted(no compiler, directly executed using interpreter), object-oriented language(modeled around objects) with first-class functions(can be assigned to a var) and is best known as scripting language(Instrs are written for run time env) but also used in non-browser env's as well
+--	Here web browser acts as run time env for Js
+
+It is a case-sensitive language and loosely typed(no type just var or let)
+// Datatypes
+Undefined, Null, Boolean, String, Symbol, Number, Object
+
+// null and undefined
+var num;	-- declared but undefined
+num = 10;	-- defined
+null 
+In JavaScript, both null and undefined have a falsy value so when you do an equality check with == they are considered the same. If you use a strict equality check with === they are considered different. In the case of a comparison between null and undefined, because they have different types, both operands are coerced to false.
+
+// Symbol
+A Symbol value represents a unique identifier. 
+// Here are two symbols with the same description:
+let Sym1 = Symbol("Sym")
+let Sym2 = Symbol("Sym")
+  
+console.log(Sym1 === Sym2) // returns "false"
+// Symbols are guaranteed to be **unique. Even if we create many symbols with the same description, they are different values.
+Symbols are special. They don’t auto-convert.
+eg) alert(Sym1)  // TypeError: Cannot convert a Symbol value to a string (strings and symbols are fundamentally different, and should not occasionally convert one into another)
+alert(Sym.toString())  // Symbol(Sym), now it works (OR) alert(_Sym.description); // Sym --> we can use symbol.description
+
+// console.log(5 < 6 < 7) --> true b'coz (5 < 6) is true (value of true is 1) --> (true < 7) which is true
+// console.log(7 > 6 > 5) --> false b'coz (7 > 6) is true --> (true > 5) --> is false
+
+// ar = [1,2,2,3] --> remove duplicates --> new Set(ar) --> but this will give set not array so, console.log([...new Set(ar)]);
+// let a = () => arguments;
+console.log(a('hi'));	// O/P:-> we would not have hi in arguments, coz arguments does not bind to arrow functions, If we use function() { return arguments;}, it will but not recommended using arguments
+
+// 
+let profile = { name: 'manoj' }
+profile.age = 22;		// 1st Ques, I want to prevent user from doing this
+Object.freeze(profile);	// so we only get name property when we console profile obj, also we cant modify the property values
+// 2nd ques I want user to modify the values of properties which are available in profile obj
+Object.seal(profile)	// It doesnt allow user to add new properties but allows to alter existing ones
+
+// let profile = { name: 'manoj', age: 20 }
+so what we are gonna do is; let profile = { name: 'manoj' } we'll have this in this way and;
+Object.defineProperty(profile, 'age', {						// So using this Object ppty we can define properties of Obj and also specify access to it
+	value: 20,
+	writable: false
+});
+
+//console.log(Math.max())	// O/P:-> -Infinity		but why??
+// console.log(Math.max(1,2,3))	// 3		So in order to find max we need to compare the items with lowest possible value which is -infinity, so first it compares -infinity with 1 and then 1 with 2 and then 2 with 3. Finally O/P will be 3
+
+// console.log([] + []) -> O/P:-> empty String, coz it considers empty array/obj/set as "" + "", if we use + (concat)
+
+// we can edit our html page elements directly in browser using this
+<div contenteditable="true">Hello</div>			// also we can make our web sites to contenteditable by opening the console and adding this; document.body.contenteditable = true
+
+// tricky
+function y() { console.log(this.length); }
+var x = { 
+	length: 5, 
+	method: function(y) {
+		arguments[0]();
+	}
+};
+x.method(y, 1);			// O/P:-> 2, coz method function takes all args and then exceutes first arg (arguments[0]()), which is y() here,and y prints this.length. here this represents arguments, so total no of arguments are 2
+
+(refer techsith videos)
+const x = 'constructor'
+console.log(x[x](01))	// O/P is 1		// x[x] = String and x[x](01) will convert 01 to string which 1 and x[x] means the first x is the string and if you see there are some properties for string object which among them 'constructor' is one and calling this would return String, so thats what is happening here
+
+console.log(0.1 + 0.2) // O/P:-> 0.30000000000000004 , in coz in js doing floating point variation variant but it differs
+
+// console.log(('hi').__proto__.__proto__.__proto__);
+so first console.log(('hi').__proto__)	// String.__proto__ --> String (__proto__ will call constructor which will throe whatever the obj is, here its String)
+console.log(('hi').__proto__.__proto__) // we would get a constructor which is Object, if you check, coz String is created using Object. and Object is Top level Object (SuperClass)
+console.log(('hi').__proto__.__proto__.__proto__);	// null, coz there's nothing more than that
+
+// A function that returns total no of arguments
+let x = function() {
+	return [].slice(arguments).length		// It will slice all the arguments into an array and it will find length of it and return
+}
+console.log(x(1,2,3,4,5));		// 5
+
+//
+var A = {
+	x: function() { console.log('x'); },
+	y: function() { console.log('y'); },
+	z: function() { console.log('z'); },
+}
+
+A.x().y().z(); 	// method chaining	and it shud print x, y, z
+
+So we need to return A or this inside every function after console.log()
+
+// prototypal inheritance (prototype based inheritance)
+let car = function(model) {
+	this.model = model;
+	};
+car.prototype.getModel = function() { return this.model; }	
+let toyota = new Car('toyota');
+console.log(toyota.getModel());		// toyota
+
+// fn declaration & fn Expression
+function funcD() { console.log('function declaration'); }
+let funcE = function() { console.log('function expression'); }	// basically its an anonymous fn saved into a variable
+Also if we call function funcD() above the definition , it wud work but whereas expression its not the case it throws RefernceError since we have defined it in a variable which has a scope
+when we want to pass a func to another func we cannot use funcD coz it doesnt have a variable
+
+// setTimeout
+setTimeout(function() { console.log('a');}, 0);
+console.log('b');
+console.log('c');
+O/P:- b c a , coz setTimeout is async so it will wait for sometime
+
+// closures
+when a fn returns another fn, the returning fn wud hold its environment
+eg)
+let obj = function() {
+	let i = 0;
+	return {
+		setI(k) {
+			i = k;
+		},
+		getI() {
+			return i;
+		}
+	}
+};
+let x = obj();
+x.setI(2);
+console.log(x.getI());	// 2
+
+// In-depth explanation in closures
+"whenever you declare a function inside another function, the inside function(s) is/are recreated again each time the outside function is called"
+"Closures are functions that refer to independent (free) variables. In other words, the function defined in the closure 'remembers' the environment in which it was created."
+eg) 
+var passed = 3;					// lexical scoping --> variable outside is available inside function . ans is closure
+var addTo = function() {
+	var inner = 2;
+	return passed + inner;
+};
+console.log(addTo());	// 5
+
+eg 2)
+var addTo = function(passed) {
+	var add = function(inner) {
+		return passed + inner;
+	}
+	return add;							// when this is returned it will actually preserve passed variable value in its state and returns the method --> 
+};
+console.log(addTo(3));						// return 3 + inner;	--> this only happens
+console.log(addTo(3)(2));				// 5
+var addThree = new addTo(3);
+console.log(addThree(2));				// 5
+
+// lexical scoping -> variables defined outside scope are automatically available
+eg) for closure
+let f = () => {
+	let i = 2;
+	let j = 4;
+	return () => {				// Since the returned anonymous fn doesnt use j variable, it doesnt preserve j and only preserves i as it uses it inside its scope
+		return i;
+	}
+};
+console.dir(f());			// In console , we will have only i variable in closure not j
+
+// closures inside a for-loop
+for (let i = 0; i < 3; i++) {
+	setTimeout(() => {
+		console.log(i);
+	}, 1000);
+}
+console.log('After for loop')		// This runs first and then logs 0, 1, 2 		O/P:-> After for loop 0 1 2
+
+If let is replaced with var inside for loop, O/P is --> After the loop 3 (3 times)		// Actually based on loop condn it shud'nt be 3 at all and further how is it logging 3 three times. Thats b'coz var is function scoped and it redeclares variable so every time when the new iteration starts i variable increments changing the previous values as well and atlast to check whether variable i is < 3 it has to be incremented making i as 3 and then only it comes out of for loop. So in this way all becomes 3
+
+To fix this we can do like this;
+for (var i = 0; i < 3; i++) {
+	((i) => {						// immediately invoked  Function Expression
+		setTimeout(() => {
+			console.log(i);
+		}, 1000);
+	})(i);
+}
+console.log('After for loop')		// This runs first and then logs 0, 1, 2 		O/P:-> After for loop 0 1 2
+
+// shadowing
+var global = "hi";
+
+function show() {
+	var global = "hello"		// shadowing happens here
+}
+show();
+console.log(global)
+
+// Template Literals
+let one = 1;
+let two = 2;
+let tagged = function(strArray, ...vals) {
+	console.log(strArray);								// ["adding ", " and ", " give me ", ""] 
+	console.log(vals);									// [1, 2, 3]
+}
+tagged`adding ${one} and ${two} give me ${one + two}`
+
+eg)
+let raw = String.raw` Not a newline:\n`;
+console.log(raw)							// O/P:-> Not a newline:\n	-> comes as it is with all special chars
+let name = 'hello';
+console.log(name.repeat(3))		// name.includes('llo')		// name.endsWith('lo');		// name.startsWith('he')
+
+// JS is always passed by reference
+let a = 4;
+
+let change = (val) => {
+	val = 2;							// Primitive values cant be mutated, It is passed by ref but it will create a new ref when reassigned
+	};
+change(a);
+console.log(a);			// 4 but it doesnt mean its call by value
+
+eg-2) proof of call by reference
+let a = {num:3}
+let change = (val) => {
+	// val = {}							// In this case also we will get {num:3}
+	val.num = 2;						// here it makes a difference, rather than reassigning the whole obj. During reassigning it will create a new obj with new ref
+	};
+change(a);
+console.log(a);			// {num: 2}
+
+eg-3) 
+let a = {num:3}
+let b = a;
+a.num = 2;									// but if we do a = {}
+console.log(a)		// {num:2}				// This wud be {}
+console.log(b)		// {num:2}				// This wud be {num:3}
+
+// Default Parameters
+										obj = {a:2, b:3};
+let add = (a = 0, b = 0) => {		// add = (ob = {})				// add = ({a = 0, b = 0} = {}) => {
+	return a + b;							return 								return a + b;
+}																				}
+console.log(add());					// 0									// add() -> 0  (OR) add(obj) -> 5
+
+// Callbacks
+To make our functions abstract we use callbacks, so that we dont have to define our business logic there, which wud put that in more readability
+
+let add = function(a, b) { return a + b; };
+let multiply = function(a, b) { return a * b; };
+
+let calc = function (a, b, callback) {
+	if (typeof callback === "function" {
+		return callback(a, b);
+	}
+};
+
+calc(2, 3, add)			//  calc(2, 3, multiply)		// calc(2, 3, doSomething)
+
+eg 2) This wud be array sort function
+let arr = [ {num:3, str: 'apple'}, {num:2, str: 'banana'}, {num:4, str: 'orange'}];
+
+arr.sort(function (obj1, obj2) {					// This is a example of callback func
+	if (obj1.str > obj2.str) return 1;
+	else return -1;
+});
+
+// IIFE (Immediately Invoked Function Expression) a.k.a Self executing anonymous function or self invoked anonymous function
+-- function expression
+	-- let increment = function() { return i + 1; }
+	-- increment(2);
+-- Immediately Invoked
+	-- (function(i) {					// these are scenarios where we might use a func only once, in that case we can go for this
+			return i + 1;
+		})(j);				// (OR) }(j));	// 1st way is preferred
+	-- !function(){	/* code here */ }();
+	-- ~function(){	/* code here */ }(); (OR) -function(){	/* code here */ }(); (OR) +function(){	/* code here */ }();
+
+eg) (function($) {								// Here, $ sign is available only within this scope
+		$(this).addClass('MyClass');
+	})(window.JQuery);
+
+eg) 
+var counter = (function() {										// this func will exceute immediately and will return the result to counter variable
+	var i = 0;					// private data member
+	
+	return {
+		get: function() {
+			return i;
+		},
+		set: function(val) {
+			i = val;
+		},
+		increment: function() {
+			i++;
+		}
+	}
+})();
+
+console.log(counter.get());
+console.log(counter.set(2));
+console.log(counter.increment());
+
+
+// call, apply, bind
+	-- call		--> first arg shud be object
+		var obj = {num: 3};
+		car addToThis = function(a) { return this.num + a; };																				// return this.num + a+b+c+d
+		console.log(addToThis.call(obj, 3));	--> 5			// functionName.call(obj. functionarguments)	// addToThis.call(obj, 3, 4, 5, 6), so function(a, b, c, d); O/P: 21
+	-- apply			// array will be converted to arguments
+		var arr = [3,4,5,6]
+		addToThis.apply(obj, arr)		O/P:-> 21	// here, no need of altering args in function, just arr can be used rest is same
+	-- bind
+		var bound = addToThis.bind(obj, arr)		// gives an obj -> It actually makes the passed obj available to the function & returns the func as obj itself, the obj is bound
+		Actually no need of passing args.... I mean;
+		var bound = addToThis.bind(obj)				// the obj will be bounded in function and gets returned as a diff obj called bound (can verify in developer tools)
+		console.log(bound(3));		-> 5			// Now we can call it whenever we want
+
+// currying function (method)
+	we will use closures to build currying function
+	eg)
+	var add = function(a) {
+		return function(b) {
+			return a + b;
+		}
+	};
+	var addToFive = add(5);				// O/P:->>	Its a function obj, but it will look like 		->> function(b) { return 5 + b; };
+	console.log(addToFive(1));			// O/P:-->> 6
+	eg)
+	let avg = function(...n) {
+		let tot = 0;
+		for (let i = 0; i < n.length; i++) {
+			tot += n[i];
+		}
+		return tot/n.length;
+	};
+	var spiceUp = function(fn, ...n) {
+		return function(...m) {
+			n.concat(m);
+			return fn.apply(this, n);
+		}
+	};
+	var doAvg = spiceUp(avg, 1, 2, 3);
+	console.log(doAvg(2));				// 2		doAvg(4, 5, 6)	--> 3.5
+	eg)
+	var sayWhat = function(a) { return function(b) { return function(c) { console.log(a + " "+ b + " " + c); } } }
+	sayWhat('hi')('hello')('Bonjour');
+	
+// Debounce
+In case if we want to execute a function on a button click, but what if the user clicks the button continuosly. Debounce will execute that event on last click
+For eg) If we want to fire an event on a mouse move, usually when we move our mouse it will keep firing the event but we can prevent this by using debounce as it will trigger that event only when the movement stops
+eg)
+	HTML	--> <button id="myId"> Click Me </button>
+	JS
+	document.getElementById('myId').addEventListener("click", () => {
+		console.log('clicked');																	// Normally every time we click , it will log this
+	});
+	// but accidentally there are possibilities where user might click the button double times. So to prevent that we make use of debounce
+	
+	const debounce = (fn, delay) => {
+		let timeoutId;
+		return function(...args) {
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
+			timeoutId = setTimeout(() => {
+				fn(...args);
+			}, delay);
+		}
+	}
+	
+	document.getElementById('myId').addEventListener("click", debounce(ele => {
+		console.log('clicked');
+	}, 2000))
+
+
+// Throttle -> Debounce and Throttling both avoid unnecessary action
+Throttling acts different compared to Debounce.
+In Throttling when we givce a delay say 5000 (5 sec). And when the user clicks on a button, On the first click the event will trigger but after that if the user clicks the button it wont be fired within that delay period. But if the delay is 5s and if the button is clicked after 5s then the event will be fired
+
+// Debounce is usually preferred but it depends on the application
+	
+// Modules in Js (when using import and export, we shud be giving type="module" in script tag in index html)
+1) We can default export only one thing in a file. Usually we give default keyword for class. For importing default things. Use import Person from '/person.js'
+2) Others would be normal export. use like this eg) import Person, { sortNames } from '/person.js'; We need to use curly braces {,} for normal export stuff
+3) Also we can use alias there import Person, { sortNames as sort } from '/person.js'
+
+// adv of JS
+1) less interaction with server, Increased Interactivity, Richer Interfaces
+
+// var num = 10; typeof num
+
+// Array mthds
+const items = [ {name: 'manoj', price: 1000}, {}, {}, ... ]
+
+// these filter mthds doesnt change the underlying object
+1) const filteredItems = items.filter((item) => {		// filters items that are less than equal to 100
+						return item.price <= 100; });
+						
+2) const itemNames = items.map((item) => {				// we'll get an array of item names alone
+						return item.name });
+						
+3) const foundItem = items.find((item) => {				// we'll get that item alone
+						return item.name === 'Book' });
+						
+4) items.forEach((item) => console.log(item.name + " "+ item.price));
+
+5) const hasInexpensiveItems = items.some((item) => {	// returns boolean,If any one item in the array has price less than equal to 100, then it wud return true for the whole array
+						return item.price <= 100; });	// O/P: true
+
+6) const hasInexpensiveItems = items.every((item) => {	// returns boolean,If any one item in the array has price greater than  100, then it wud return false for the whole array
+						return item.price <= 100; });	// It checks if evry item in the array is less than equal to 100, else returns false
+
+7) const total = items.reduce((currentTotal, item) => {	// returns sum but can do other operations as well.Here, 2 arg is the items in array.First time it runs, currentTotal will be 0
+						return item.price + currentTotal; }, 0);	// starting point is 0 (zero), which means it starts currentTotal from 0 -> zero
+
+8) const includesTwo = items.includes(2);	// returns boolean, checks whether specified element is presnt in array or not
+
+
+// Anonymous fn
+var show = function() { something... };
+show();
+
+// 2 variable scopes
+1) Global - everywhere
+2) Local - fn or within a block
+
+// Hoisting
+variables defined with var get hoisted, but not let and const
+if (true) {
+	console.log(v);		// undefined
+	console.log(l);		// RefernceError
+	var v = 2;
+	let l = 3;
+}
+
+
+// callbacks - they are functions which are passed to a method. Sometimes when an event occurs we use callbacks to respond to that event
+
+// closure - They are created whenever a variable that is defined outside the current scope is accessed from within some inner scope
+
+// Built-in mthds charAt(), concat(), forEach(), length(), pop(), push(), reverse()
+
+// create a cookie
+document.cookie = "key1=value1; key2 = value2; expires= date";
+// Delete a cookie, set expiration date to a time in the past
+
+// getElementById(), getElementsByClass(), getElementsByTagName(), querySelector()
+
+// Js code can be involved in 3 ways  in an html code; 1) Inline, Internal, External
+
+// Var, let, const
+var is function scoped and let is block scoped
+For const we need to define value during declaration, or else error is thrown.
+const a;		// error , JS by default assigns undefined here so error is thrown
+a = 10;
+
+// Typed language 1) Dynamically - the variable can hold multiple types	2) Statically - The variable can hold only one type
+
+// Local Storage - it is manually cleared via settings, Session Storage - The data will leave when the browser is closed
+
+// '==' -> compares value only; '===' -> compares value and type
+eg) console.log('1' == 1)	// true	// Here what happens is, it actually converts the both the types to same and then checks value first one is string so converts 2nd one to string
+	console.log('1' === 1)  // false
+
+// null and undefined; when typeof is used on null, the value will be an object whereas undefined will be undefined
+They both represent empty value. When we dont assign a value to a variable JS by default assigns undefined
+
+// Undeclared -> Those that do not exist in a pgm and are not declared
+// undefined -> That are declared but not given value
+
+// window is a global obj which holds vars, fns, hsitory, location. 
+// Document comes under window, considered as a ppty of window
+
+// innerHTML (will process an HTML tag if found in a string) & innerText (will not process an HTML tag if found in a string)
+
+// event bubbling - when an event is fired on an HTML element the execution starts from that event and goes to parent element, then it goes to parent elem and so on till body elem
+// NaN - when string converted to number but cannot be done then we will get this
+
+// imports and exports help us to write Modular JS
+
+// call() and apply() both are basically same but in apply() we use array to pass args
+
+// Event loop
+
+// Promise()	(refer webdev simplified)
+eg) 
+let p = Promise((resolve, reject) => {
+	let a = 1+1
+	if (a == 2) {
+	resolve('Success')
+	}
+	else {
+	reject('Failed')
+	}
+})
+
+// Anything inside of a .then() is going to run for a resolve and catch() will run for reject
+p.then((message) => {
+	console.log('This is in the then '+ message)
+}).catch((message) => {
+	console.log('This is in the catch '+ message)
+});
+
+// Promise's are very similar to callbacks
+
+// Can use more than one then --> .then().then()
+
+// Promise.all
+const recordVideoOne = new Promise((resolve, reject) => {
+	resolve('Video 1 recorded')
+})
+const recordVideoTwo = new Promise((resolve, reject) => {
+	resolve('Video 2 recorded')
+})
+const recordVideoThree = new Promise((resolve, reject) => {
+	resolve('Video 3 recorded')
+})
+
+
+Promise.all([
+	recordVideoOne, recordVideoTwo, recordVideoThree
+]).then((messages) => {
+	console.log(messages)		// A list of msgs will be produced	O/P:-> ["Video 1 recorded", "Video 2 recorded", "Video 3 recorded"]
+}).catch()
+
+Promise.race([]).then().catch(); // .race is very similar to .all but it returns whichever the one completes first
+	// O/P:-> we'll get only one return whichever is the one that completes first --> Video 1 recorded
+In Promise.all(), it will take longest promise's time and then it will return whereas .race() waits for any one to complete first
+
+// setTimeout(function() {	(Or)  setTimeout(() => {			--> It takes 2 args one is callback function and a delay  
+	}, 1000);		
+
+(refer traversy media)
+// fetch()	--> To make AJAX calls or http request, which returns Promise
+const promise = fetch('url');
+// for fetch we need to format the content to json, or else it will send some weird data.
+so const promise = fetch('url').then((value) => value.json());
+
+// Async / Await	--> Its a more elegant way to handle promises
+We need to use async in a function if we are using await inside it
+await -- await waits for asynchronous process or action to complete
+
+for ex)
+async function init() {
+	await createPosts({ title: 'Post three', body: 'This is third Post' });		// await, simply waits for the following process / action to get completed and then it goes to nxt line
+	const res = await fetch('url');
+	const data = res.json();
+	console.log(data);
+}
+
+init();

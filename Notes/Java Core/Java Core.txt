@@ -1,0 +1,224 @@
+// Java
+
+// Enhanced for loop
+for (int i: nums) {}
+
+// Static variables are initialized in static block bcz static block is called only once when class is loaded, but constructor is called everytime an instance is created
+// So its good to use in static block for static variables
+// If there are multiple static blocks, then it loads them in order
+
+// We can also use the following formula if we want to a generate random number between a specified range.
+Math.random() * (max - min + 1) + min  // In the formula, the min value is inclusive while the max value is exclusive.
+
+// arraycopy(srcArray, 0, destArr, 0, totalLength)	// Its a native mthd so fast compared to clone()
+eg) System.arraycopy(source_arr, sourcePos, dest_arr, destPos, len);
+	source_array : 10 20 30 40 50 60 70 80 90 100 
+	sourcePos : 3
+	dest_array : 15 25 35 45 55 65 75 85 95 105 
+	destPos : 5
+	len : 4
+	final dest_array : 15 25 35 45 55 40 50 60 70 105 
+
+// Type Promotion (javatpoint)
+1) byte -> short -> int
+2) char -> int
+3) int -> float, int -> long, int -> double
+4) long -> float, long -> double
+5) float -> double
+6) double -> nothing
+
+// Covariant return type	(Java doesn't allow the return type based overloading but JVM always allows return type based overloading)
+
+//Constructor Chaining is nothing but using this() keyword to call a different constructor from a constructor
+
+// If class A has a method show() which is protected and if Class B inherits A,and overrides show() method we will get Compile Time error since default specifier is more restrictive than protected specifier
+
+// The strictfp keyword can be applied on methods, classes and interfaces. strictfp ensures that you will get the same result on every platform if you perform operations in the floating-point variable.
+
+// The java.lang.String class implements Serializable, Comparable and CharSequence interfaces. Also StringBuffer and StringBuilder implements CharSequence
+// StringBuffer class is thread-safe i.e. multiple threads cannot access it simultaneously. So it is safe and will result in an order. The default capacity of the buffer is 16. it increases the capacity by (oldcapacity*2)+2
+String class overrides the equals() method of Object class and StringBuffer doesnt
+// String is less efficient to StringBuffer, but StringBuffer(Thread-safe) is less efficient to StringBuilder
+
+// Immutable class can be created by; 1) making the class final 2) Making data members final 3) With no set methods
+
+// Why string objects are immutable in java?
+Because java uses the concept of string literal.Suppose there are 5 reference variables,all referes to one object "sachin".If one reference variable changes the value of the object, it will be affected to all the reference variables. That is why string objects are immutable in java.
+
+// Exception Handling
+	The Exception Handling in Java is one of the powerful mechanism to handle the **runtime errors so that normal flow of the application can be maintained.
+	An exception is an event that disrupts the normal flow of the program. **Runtime errors such as NullPointerException, ArrayIndexOutOfBoundsException, etc.
+
+1) Checked Exception
+The classes which directly inherit Throwable class except RuntimeException and Error are known as checked exceptions e.g. IOException, SQLException etc. Checked exceptions are checked at compile-time.
+
+2) Unchecked Exception
+The classes which inherit RuntimeException are known as unchecked exceptions e.g. ArithmeticException, NullPointerException, ArrayIndexOutOfBoundsException etc. Unchecked exceptions are not checked at compile-time, but they are checked at runtime.
+
+3) Error
+Error is irrecoverable e.g. OutOfMemoryError, VirtualMachineError, AssertionError etc.
+
+eg) int a=50/0;//ArithmeticException  || String s=null;  System.out.println(s.length());//NullPointerException  || String s="abc";  int i=Integer.parseInt(s);//NumberFormatException
+
+// Java Exception propagation
+Rule: By default Unchecked Exceptions are forwarded in calling chain (propagated).
+Rule: By default, Checked Exceptions are not forwarded in calling chain (propagated).
+
+// checked exceptions can be propagated by throws keyword.	Java throws keyword is used to declare an exception
+A)In case you declare the exception, if exception does not occur, the code will be executed fine.
+B)In case you declare the exception if exception occures, an exception will be thrown at runtime because throws does not handle the exception.
+
+// Exception Handling with Method Overriding
+1) Rule: If the superclass method does not declare an exception, subclass overridden method cannot declare the checked exception(IOException, etc).
+2) Rule: If the superclass method does not declare an exception, subclass overridden method cannot declare the checked exception but can declare unchecked exception(ArithmeticException, NullPointerException, etc).
+3) Rule: If the superclass method declares an exception, subclass overridden method can declare same, subclass exception or no exception but cannot declare parent exception.
+
+// Threads	(Multithreading is mostly used in games, animation, etc) 	Note: At a time one thread is executed only.
+A thread is a lightweight sub-process, the smallest unit of processing. Multiprocessing and multithreading, both are used to achieve multitasking.
+Threads use a shared memory area. They don't allocate separate memory area so saves memory, and context-switching between the threads takes less time than process.
+1) Threads are independent, so it doesn't affect other threads if an exception occurs in a single thread.
+2) It doesn't block the user because threads are independent and you can perform multiple operations at the same time.
+
+// The thread scheduler mainly uses preemptive or time slicing scheduling to schedule the threads.
+Under time slicing, a task executes for a predefined slice of time and then reenters the pool of ready tasks. The scheduler then determines which task should execute next, based on priority and other factors. If you sleep a thread for the specified time,the thread shedular picks up another thread and so on.
+
+// run() method
+-- Each thread starts in a separate call stack.
+-- Invoking the run() method from main thread, the run() method goes onto the current call stack rather than at the beginning of a new call stack.
+
+// Thread Priority	(MAX_PRIORITY(10), MIN_PRIORITY(1), NORM_PRIORITY(5))
+Each thread have a priority. Priorities are represented by a number between 1 and 10. In most cases, thread schedular schedules the threads according to their priority (known as preemptive scheduling). But it is not guaranteed because it depends on JVM specification that which scheduling it chooses.
+
+// Daemon Thread
+Daemon thread in java is a service provider thread that provides services to the user thread. Its life depend on the mercy of user threads i.e. when all the user threads dies, JVM terminates this thread automatically. There are many java daemon threads running automatically e.g. gc, finalizer etc.
+Note: Its life depends on user threads. It is a low priority thread. If there is no user thread, why should JVM keep running this thread. That is why JVM terminates the daemon thread if there is no user thread.
+eg) Person p = new Person();  p.setDaemon(true);	Thread.currentThread().isDaemon()
+Note: If you want to make a user thread as Daemon, it must not be started before setting it as Daemon otherwise it will throw IllegalThreadStateException.
+
+// shutdown hook
+The shutdown hook can be used to perform cleanup resource or save the state when JVM shuts down normally or abruptly. Performing clean resource means closing log file, sending some alerts or something else. So if you want to execute some code before JVM shuts down, use shutdown hook.
+Note: The shutdown sequence can be stopped by invoking the halt(int) method of Runtime class.
+eg) Runtime r=Runtime.getRuntime();  r.addShutdownHook(new MyThread()); 
+
+// Garbage Collector
+Note: The Garbage collector of JVM collects only those objects that are created by new keyword. So if you have created any object without new, you can use finalize method to perform cleanup processing (destroying remaining objects).
+Note: Garbage collection is performed by a daemon thread called Garbage Collector(GC). This thread calls the finalize() method before object is garbage collected.
+eg) System.gc();		Note: Neither finalization nor garbage collection is guaranteed.
+
+// Runtime Class	// The Runtime.getRuntime() method returns the singleton instance of Runtime class.
+Java Runtime class is used to interact with java runtime environment. Java Runtime class provides methods to execute a process, invoke GC, get total and free memory etc. There is only one instance of java.lang.Runtime class is available for one java application.
+eg)   Runtime.getRuntime().exec("notepad");//will open a new notepad  2) shutdown windows Runtime.getRuntime().exec("c:\\Windows\\System32\\shutdown -s -t 0");
+
+// Synchronization
+Synchronization in java is the capability to control the access of multiple threads to any shared resource.
+It is used to 1) To prevent thread interference. 2) To prevent consistency problem.
+
+
+// Diff ways of creating class instance
+
+1) new keyword
+2) Class.newInstance()	// methd newInstance() is present in the Class -> Class
+	eg) Student s1 = (Student) Class.forName(package.Student).newInstance()
+		Student s2 = Student.class.newInstance()
+3) Constructor.newInstance()
+	// Diff between Class.newInstance() and Constructor.newInstance()
+	1) Class.newInstance() can only invoke no-args Constructor (Default Constructor) whereas Constructor.newInstance() can invoke any parameterized Constructor
+	2) Class.newInstance() requires Constructor shud be visible whereas Constructor.newInstance() can also invoke private Constructors
+	3) Class.newInstance() throws any exception thrown by constructor whereas Constructor.newInstance() always wraps the thrown exception with an InvocationTargetException
+
+//// newInstance() of Class internally calls newInstance() of Constructor
+And Constructor.newInstance() is preferred over Class.newInstance()
+Also Constructor.newInstance() is widely used in all frameworks like Spring, Hibernate, Struts. And this way of object creation is called reflective way of object creation.
+Eg)
+Constructor<Student> const = Student.class.getConstructor();
+Student s1 = const.newInstance();
+
+4) ///// In which way of Object creation the constructor doesnt get called???
+---> clone() mthd	// java.lang.Object package
+eg) Student s1 = new Student()
+	s1.number = 10; s1.name = "manoj";
+	Student s2 = (Student) s1.clone();
+	In s2 object all the values will be same to same like in s1. I mean the number, name would be ditto except s2 will have different reference.
+	But when we clone it, that Class Student should implement Cloneable interface and override clone() method...
+	
+5) Using deserialization
+
+// Serialization
+
+Eg)
+FileOutputStream fos = new FileOutputStream("text.txt");
+ObjectOutputStream oos = new ObjectOutputStream(fos);
+Student s1 = new Student()
+oos.writeObject(s1);		// now the object is serialized
+
+// Deserialization
+FileInputStream fis = new FileInputStream("text.txt");
+ObjectInputStream ois = new ObjectInputStream(fis);
+Student s2 = (Student)ois.readObject()	// Creating or getting the student class
+
+////While doing this we shud implement serializable interface
+// During serialization, JVM doesnt call constructor
+
+So, deserialization and clone() method wont invoke constructor()
+
+// hashCode() and equals() methods
+hashCode() methd is a Object class methd and by default all classes extend Object class
+public native int hashCode(); --> like this it is defined
+
+// native keyword
+	And this mthd is native method. I mean it has a keyword native in that method, Which are defined and implemented in a different language (Mostly they are written in c/c++)
+	These native mthds are a.k.a Foreign mthds
+-- hashCode() is responsible to provide unique values for each object.
+It always gives a unique number...
+
+// But How are we getting Unique number each time??
+hashCode() is not certainly returning memory address of the object.
+It actually takes that address reference and multiplies and adds with some other number and then returns a new number
+So, though it uses memory address of an object, internally it does some operations before returning the number.
+Eg) String name = "Manoj";		// So let us consider name obj has a memory reference 2234 in heap memory.
+int hash = name.hashCode();		// here, this number 2234(ref of name obj) is taken and internally operations occur (2234 * 31 + 1) and then it returns the integer.
+
+In Java, we can never play with memory reference of an obj. We can do that in C lang, not in java. Only JVM does that, we dont get to play any role on memory reference
+
+In String
+String a = new String("hi");
+String b = new String("hello");	// Here both the strings have unique hashCode
+but for literals it will be same:
+String a = "hi";	String b = "hello";
+
+//	So we cannot guarantee hashCode will not return same integer to another obj.
+// It is absolutely possible that 2 diff objs can have same hashCode, but also we cant guarantee that if 2 objs have same hashCode it doesnt mean both have same value
+
+// Equals methods
+
+// ==
+checks for identity (reference) not value
+if we check equality b/w two class objs with obj1.equals(obj2). It will check for reference, if its not overrided in obj1 class
+
+// For String class equals()	It does content comparison, not reference since its been overriden in String Class
+String a = new String("hi");
+String b = new String("hello");
+sop(a.equals(b));	// false
+String b = new String("hi");
+sop(a.equals(b))	// If both the objs have same value its going to be true Coz String class has overriden equals methd and has done changes accordingly to manage this.
+
+// For class equals()
+override to make it work
+
+// Serialization
+
+1) If a class extends a parent class which implements Serializable, then even base class is considered Serializable
+2) If a class has writeObject or readObject mthds in class which implements serializable, then it will throw NotSerializableException
+3) Static members are ignored since it is bound with class and not instance of an object
+
+// Externalizable
+Its an customized serializabled
+	public void writeExternalizable()
+	public void readExternalizable()
+1)Implementation -> It expects users to explicity mention objs to be serialized
+2) Backward Compatibility
+3) It requires public no-arg constructor
+4) Process -> 
+
+// Transient - skips this variable
+Serial Version UID

@@ -1,0 +1,62 @@
+// Mockito (Refer Defog Tech and in28Minutes)
+import static org.mockito.Mockiti.mock
+import static org.mockito.Mockiti.when
+
+DataService dataServiceMock = mock(DataService.class);	// mocking a class
+
+when(dataServiceMock.retrievAllData()).thenReturn(new int[] {20, 24, 10, 5});	// retrievAllData() returns an int[] array
+
+If any class uses this dataServiceMock as dependency then they can pass this obj in constructor
+
+SomeBusinessImpl businessImpl = new SomeBusinessImpl(dataServiceMock);
+int result = businessImpl.findGreatestFromAllData();		// here, when findGreatestFromAllData invokes retrievAllData() mthd of dataServiceMock then our mock will return custom data
+assertEquals(24, result);
+
+// @Mock, @InjectMocks, @RunWith
+
+@RunWith(MockitoJUnitRunner.class)	(OR)SpringRunner.class			// Need to use RunWith when we use annotations like Mock and InjectMocks
+public class SomeBusinessMockAnnotations {
+	
+	@Mock
+	DataService dataServiceMock;
+
+	@InjectMocks													// Automatically injects DataService to this class
+	SomeBusinessImpl businessImpl;
+	
+	@Test
+	public void testFindTheGreatestFromAllData() {
+		when(dataServiceMock.retrievAllData()).thenReturn(new int[] {20, 24, 10, 5});	// retrievAllData() returns an int[] array
+		int result = businessImpl.findGreatestFromAllData();
+		assertEquals(24, result);
+	}
+}
+
+// To make a mock fn return diff values during each call;
+when(dataServiceMock.retrievAllData()).thenReturn(new int[] {20, 24, 10, 5}).thenReturn(new int[] {20, 22, 10, 5});
+assertEquals(24, businessImpl.findGreatestFromAllData());
+assertEquals(22, businessImpl.findGreatestFromAllData());
+
+// By default if we have one thenReturn, it will return the same no matter how many times we call that mthd
+
+// mock mthds with args
+when(dataServiceMock.retrievAllData("hi")).thenReturn(new int[] {20, 24, 10, 5});
+
+// generic parameters
+Mockito.anyInt()	--> If we use this in retrievAllData(Mockiti.anyInt())	then whenevr an integer is used as an arg then it wud return that result which is specified
+similar to anyInt(), anyList(), anyString(), etc are available
+// But when we use generic parameters all other args shud also be generic. we cannot use one generic parameter and one specific parameter
+
+// Spring Framework
+
+@RunWith(SpringRunner.class)	// when using mockito replace SpringRunner with MockitoJUnitRunner.class
+@ContextConfiguration(classes=SpringBootmainApplication.class)
+public class BinarySearchTest {
+	
+	@Autowired
+	BinarySearchImpl binarySearchImpl;
+	
+	@Test
+	public void testBasicsScenario() {
+		binarySearchImpl.binarySearch(new int[] {}, 5);
+		}
+}

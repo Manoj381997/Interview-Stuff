@@ -1,0 +1,177 @@
+// Spring REST (refer in28minutes)
+
+@RestController is a convenience annotation that is itself annotated with @Controller and @ResponseBody.
+
+@PathVaraible	-- For URL	(/manoj)
+@RequestParam	-- For query params, things followed by ? (?name=manoj)
+@RequestMapping, @GetMapping, @PostMapping, @PutMapping, @DeleteMapping
+@RequestBody -- In place of @PathVaraible when we are doing a Post request, to create a new record
+
+In Post request, the record will be created 
+In Put Request, If record is available it'll update else creates
+
+@ResponseStatus(HttpStatus.NOT_FOUND)	// Can be used in Custom Exception CLass where in case if reqested User ID is not present we can send this status along with msg
+
+Spring Boot Auto-Configuration takes care of configuring mappings using Dispatcher Servlet (Front Controller) and uses HttpMessageConverters and Jackson to convert data and beans to JSON
+
+// JPA
+spring.jpa.show-sql = true
+
+// For Generic Exception, we extend ResponseEntityExceptionHandler and make it a @RestController
+// To make it applicable to all controllers , use @ControllerAdvice
+After extending ResponseEntityExceptionHandler, we need to use method handleException, with an Annotation @ExceptionHandler(Exception.class)
+@ExceptionHandler(Exception.class), this actually shud be specific. I mean rather than using Exception.class, we can Specify specific exceptions so for that exceptions a certain Bean would be called. But in this case we are using this method for all Exceptions since Exception.class is the Base for all other Exceptions
+// And we would return a ResponseEntity(exceptionResponseMsg, HttpStatus.INTERNAL_SERVER_ERROR (or) HttpStatus.NOT_FOUND)
+
+// HTTP Status
+new ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not Authorized");	// 401 status
+new ResponseEntity.ok("Good " + time)								 		// 200 status
+new ResponseEntity.badRequest().body("time shud be morning or evening");	// 400 status
+If you use Content-Type as application/xml and this is not supported by your appln, Spring Boot by default returns a response status of 415 - Unsupported Media Type (Wrong Content Type)
+
+// ControllerAdvice
+https://dzone.com/articles/global-exception-handling-with-controlleradvice
+
+@Valid - Java validation API (Dependency available in Spring-boot-starter-web but we may need spring boot-starter-validation since the new release)
+@Size(min=2, message="name shud have atleast 2 chars") - For String, @Past - For Date since Date Of Birth cannot be future, it has to be Past
+Others --
+	@Future, @Null, @Pattern - the request shud match the validation pattern we provided, @Max, @Min
+
+handleMethodArgumentNotValid()	-- For Exception response status during violation in constraints that we have provided above using @Valid
+So here we need to send info regarding the violated msg, for eg if name is given less than 2 size then we need to send a msg regarding that and the request which has to thrown is HttpStatus.BAD_REQUEST
+
+// HATEOAS	(Hypermedia As The Engine Of Application State)
+Basically when a request is requested, we would send resource for others as well as links along with the request resource details
+
+Dependency -> spring-boot-starter-hateoas
+
+User us = service.findOne(id);
+if (us == null) throw new UserNotFoundException("id->"+id);
+Resource<T> rsc = new Resource<T>(userObj);
+ControllerLinkBuilder link = ControllerLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).retrieveAllUsers());	// in methodOn, we shud provide class and method for which we need to create a link. retrieveAllUsers() is a method with a resource URI, so we adding that URI along with this URI
+
+rsc.add(link.withRel("all-users");		// Giving name to access that all users URI, like this we can add many rsc links
+return rsc;
+
+In response: we will get a new section called _links: { with all-users{ href: ""} in it }
+
+
+// Internationalization (I18n)
+- LocaleResolver
+	Default - Locale.US
+ResourceBundleMessageResource
+SessionLocaleResolver and AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver(); localeResolver.setDefaultLocale(Locale.US);
+@RequestHeader(name="Accept-Language", required=false) Locale locale
+
+// Content Negotiation (jackson-data-format-xml). 
+// To restrict formats use produces // In this way we can restrict some formats
+@RequestMapping(path="/home", produces= {"application/json"}) -- which means it only produces json format, eventhough it supports for xml
+@RequestMapping(path="/home", produces= {"application/json", "application/xml"})
+//	also we have consumes similar to produces
+
+// SWAGGER is a popular Documentation format for REstful services	
+dependencies -> springfox-swagger2, also springfox-swagger-ui
+
+// This actually gives us a Documentation for our api services. It gives a complete and simple JSON format structure which can be shared to our customers.
+@Configuration	// Configure
+@EnableSwagger2	// EnableSwagger2
+public class SwaggerConfig {
+	@Bean
+	public Docket api() { 	// Docket
+		new Docket(DocumentationType.SWAGGER2);
+	}
+}
+// It also provides us Swagger - UI, which is UI page similar to Actuator where we can see our spi services
+
+paths -- include details all resources which we are exposing
+defns -- include diff elements that are used in our API's . What is there in User Bean, HelloWorldBean, etc
+info -- contains highlevel overview about stuff, description, version, title, license, contact
+// To customize document
+	inside Docket return type method above {
+			new Docket(DocumentationType.SWAGGER2)
+			.apiInfo(DEFAULT_API_INFO)					// For Info changes
+			.produces(DEFAULT_PRODUCES_AND_CONSUMES)	// For overriding produces (format xml/json)
+			.consumes(DEFAULT_PRODUCES_AND_CONSUMES);	// For overriding consumes (format xml/json)
+	}
+Then we need to provide values which are already present in ApiInfo class	// We can override that static data member which is public static final ApiInfo DEFAULT_API_INFO = new ApiInfo(); Similar for DEFAULT_CONTACT
+
+// For providing validations that are done in Entity class, we shud use @ApiModel(description="something") --> for class or for method
+-- @ApiModelProperty(notes="Birth date cannot be in past")	// for Date of birth
+-- @ApiModelProperty(notes="names shud atleast have 2 chars")	// for name attribute in Entity class
+
+// Actuator (hal browser) hal - HyperText Application Language
+-- Monitoring Services in a browser. Spring boot starter-actuator api's are in hal format. it provides links of our services
+	link ->> localhost:8080/actuator	(or) :8080/application
+
+Default endpoints provided by actuator,
+1) self
+2) health - health of appln (status)
+3) info
+
+If we provide management.endpoints.web.exposure.include=* in application.properties , we will get all endpoints
+// In hal browser
+Explorer field, Custom Request Headers field
+--> auditevents - is related to security, which users were properly validated, which users failed authentication
+--> beans - shows all spring beans that are configured
+--> conditions - exposes positive and negative matches, shows list of beans that were configures and not configured
+--> env
+--> loggers
+--> metrics - How much memory is used (jvm.memory.used)
+--> httptrace - time taken for a service // Note: This will have performance impact, so cannot be enabled in production)
+
+// filtering	
+1) Static Filtering	-- Static means for all request these fields will filtered
+	If we want to filter out the attributes present in bean, we can use filtering
+	1) @JsonIgnore											// shud be given on attributes of bean	(More Neat to use than 2nd approach)
+	2) @JsonIgnoreProperties(value={"field1", "field2"})	// shud be given above class
+2) Dynamic filtering
+	This approach is used when we want to send those fields for some request.Like In specific request we dont want to send field1, In specific req we dont want to send field2 & field3
+	-- In this approach we wont configure directly in the Beans, we will do that in the place where we retrieve values from the bean like in the controller
+	-- SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("field2", "field3");	// Here we are sending only field2 & field3
+	-- FilterProvider filters = new SimpleFilterProvider().addFilter("someBeanFilter", filter); 	// this someBeanFilter name shud be provided in the Entity Class
+	-- MappingJacksonValue mapping = new MappingJacksonValue(bean);	// Here bean, is a class which we got from db or something
+	-- mapping.setFilters(filters);						// here we need to set filters for that we need FilterProvider
+	   return mapping;
+	-- In the Bean class, give @JsonFilter("someBeanFilter")	// After this it will work as expected
+Here if we notice In every mapping method, we need to do these steps but it can be avoided by having a common method so that we can avoid redundancy
+
+// Versioning (Difficult concept)
+1) 1st Approach			a.k.a		Request Param versioning
+	@RequestMapping(value="/person/param", params="version=1")		// localhost:8080/person/param?version=1
+	@RequestMapping(value="/person/param", params="version=2")		// localhost:8080/person/param?version=2
+2) 2nd appoach
+	header versioning		a.k.a	MIME(Media) Type Versioning
+	@RequestMapping(value="/person/header", headers="X-API-VERSION=1")		// localhost:8080/person/header?version=1
+	@RequestMapping(value="/person/header", headers="X-API-VERSION=2")		// localhost:8080/person/header?version=2
+3) 3rd approach - using produces	a.k.a Accept Header Versioning
+	@RequestMapping(value="/person/produces", produces="application/vnd.company.app-v1+json")		// localhost:8080/person/produces
+	@RequestMapping(value="/person/produces", produces="application/vnd.company.app-v2+json")		// localhost:8080/person/produces
+
+// Security
+1) Basic Authentication wher user ID and password is used to to send the api resource
+2) Digest Authentication (password digest is created and sent across)
+3) OAuth2
+
+// JPA
+	-- For findById(id), we will get Optional object, eg) Optional<User> user = jpaRepo.findById(id);
+	-- We need to check if its null; like // if (!user.isPresent()) throw new UserNotFoundException    // To get user, user.get();
+
+	findByTech(String tech)
+	findByIdGreaterThan(int id)
+
+@Query("from alien where tech=?1 orderby name")			// 1 means 1st parameter, we could provide n number of parameters there and it starts from 1
+List<Alien> findByTechSorted(String tech);
+
+// Richardson Maturity Model	(Best Practices for Restful Services)
+3 diff levels:
+1) Level 0 - Exposing SOAP Web services in rest style. Eg) http://server/getPosts , /deletePosts, /doThis
+2) Level 1 - Exposing Resources with proper URI eg) http://server/getPosts/id
+3) Level 2 - (Level 1 + HTTP Methods) using getMapping, postMappong, etc
+4) Level 3 - (Level 2 + HATEOAS) Data + Next Possible actions
+
+Always think abt Consumer First - Have great documentation
+Make Best use of HTTP Methods
+Ensure Proper Status 401,201,404, etc
+No Secure in URI
+Use Plurals, prefer /users to /user and /users/1 to /user/1
+Use Nouns for Resources, user, account not deleteuser But there are exceptions /search

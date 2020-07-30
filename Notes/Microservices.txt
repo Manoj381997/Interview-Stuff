@@ -1,0 +1,11 @@
+// Micro Services
+
+Small Autonomous systems which communicate with each other via REST (HTTP protocols) which are deployed in Cloud
+For eg) If we have 5-10 microservices, each one can have many instances to handle request
+
+// Challenges
+1) Finding the Boundaries
+2) Config. Management
+3) Dynamic Scale Up and Scale Down (loads may differ, depending on it we need to create that many instances. All this with Dynamic Load Balancing)
+4) Visiblity (If bug or any issue occurs we need to know where excatly it occured, which microservice and also we need to be able to monitor 100's of microservices)
+5) Pack Of cards (if not well designed, it will be a pack of cards) There would be a certain microservice that would be fundamental for everything, coz all others may depend on it or built on top of it.Thats why its a pack of cards(built on one another). If it goes down and then everything might go. So we shud have Fault Tolerance

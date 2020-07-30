@@ -1,0 +1,56 @@
+// Collections
+
+List<Integer> list = new ArrayList<Integer>(Arrays.asList([5, 12, 4, 9, 1]);
+1) Collections.min(list) & Collections.max(list)
+
+// Since Strings implement Comparable, when we sort it will take care of it..
+List<String> listString = new ArrayList<String>(Arrays.asList(["hi", "Viru", "Mukesh", "Tahir"]);
+Collections.sort(listString)								// Ascending Order
+Collections.sort(listString,Collections.reverseOrder());	// Descending Order
+
+// Comparable and Comparator (String class and Wrapper classes implement the Comparable interface)
+Comparable -- has 1 method compareTo(). It provides a single sorting sequence only. You can sort the elements on the basis of single data member only. For ex, age, name, id, etc
+Comparator -- has 2 methods compare(Object obj1,Object obj2) and equals(Object element). It provides multiple sorting sequences. For eg) like any data member like; rollno, name, age
+
+// For Ascending Order								// For Descending order
+compareTo(Student s) {
+	if(this.age == s.age)
+		return 0;
+	else if(this.age > s.age) return 1				if(this.age > s.age) return -1
+	else return -1									else return 1
+}
+
+
+// generics
+Class A <E extends Number/List> {
+
+	public void/something add(ArrayList<? extends/super E> nums) {
+	}
+}
+
+// Collections
+ArrayList --> Expands 50% of size(Saves Memory), Not thread Safe and so Fast, Dynamic array
+Vector --> Expands 100% of size(Not conveneient for memory), Thread safe so not so fast, Dynamic Array, has capacity
+LinkedList --> Doubly linkedlist
+
+// hashmap
+
+index = hashCode(obj) & (n - 1)		// n is capacity (size)
+
+// ArrayList	Default capacity = 10 (Formula -> current capacity * 3/2 + 1) -> until JDK 6. For and above JDK 7 -> oldCapacity + oldCapacity >> 1 (eg) 10 + 5 = 15)
+Once the new array is created the older array will be eligible for garbage collection
+3 constructors
+1) Default constructor
+2) one arg (int) constructor
+3) one-arg constructor with Collection type
+
+// In the entire collection framework, only two classes implements RandomAcess interface (which is a marker interface). They are ArrayList and Vector.
+
+Synchronized ArrayList
+1) List<String> list = Collections.synchronizedList(new ArrayList<String>());
+	-- public static  List<T> synchronizedList(List<T> list)
+	-- Accepts a List which could be implementation of List interface. e.g. ArrayList, LinkedList.
+2) CopyOnWriteArrayList<String> threadSafeList = new CopyOnWriteArrayList<String>();
+	-- CopyOnWriteArrayList<T> threadSafeList = new CopyOnWriteArrayList<T>();
+	-- Create an empty List.	  It implements List interface.	  It is a thread-safe variant of ArrayList.	  T represents generic
+	

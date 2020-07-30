@@ -1,0 +1,17 @@
+// Basic Math
+
+// GCD/GCF/HCF
+gcd(a, b) {
+	if (a == 0) 
+	return b;
+	return gcd(b % a, a);
+}
+
+// In-place for Square Matrix
+// Converts A[][] to its transpose 
+void transpose(int A[][N]) 
+{ 
+    for (int i = 0; i < N; i++) 
+        for (int j = i+1; j < N; j++) 
+            swap(A[i][j], A[j][i]); 
+} 

@@ -1,0 +1,96 @@
+//Spring MVC
+In Standalone appl we are supposed to close the container in main.class
+ApplicationContext ac = kjks;
+ac.close(); (or) ac.registerShutdownHook();	// No big difference actually But registerShutdownHook() will execute once the main thread ends. So it wont give you an exception even after if you try calling a bean (ac.getBean(Person.class)) after close using (registerShutdownHook)
+But in Web applns not required to close ApplicationContext
+
+// POM
+pom.xml -> Project Object Model (where we define configuartion for the project)
+contains prj info, dependencies, plugins
+
+Maven life cycle (mvn clean install)
+1) Validate
+2) Compile
+3) Test
+4) Package
+5) Integration Test
+6) Verify
+7) Install
+8) Deploy
+
+GroupId and ArtifactID are important, suppose we want to use this prj in another, then we need to provide these 2 in order to include in that prj
+
+Dispatcher Servlet (a.k.a Front controller) which redirects request from client/browser to appropriate controller
+View resolver, where we assign prefix (/WEB-INF/views/) and suffix (.jsp), so that we can just return name of JSP file in controller methods
+
+//// Spring MVC Request Flow
+1) DispatcherServlet receives HTTP Request.
+2) DispatcherServlet identifies the right Controller based on the URL.
+3) Controller executes Business Logic.
+4) Controller returns a) Model b) View Name Back to DispatcherServlet.
+5) DispatcherServlet identifies the correct view (ViewResolver).
+6) DispatcherServlet makes the model available to view and executes it.
+7) DispatcherServlet returns HTTP Response Back.
+
+@RequestMapping("/home"), @Controller, 
+@RequestParam("id"), @PathVariable("id")
+
+extends CrudRepository<Class, Integer>
+or extends JpaRepository<Class, Integer>	// Which implicitly extends CrudRepository with xtra features
+Diff. is in CrudRepository when you invoke findAll() it returns iterable whereas in JpaRepository it returns List and many more etc
+
+// GET
+@RequestMapping("/person/{id}")	// Also @GetMapping
+@ResponseBody					// Instead of using ResponseBody we can make our controller, RestController
+public Optional<Person> getPerson(@PathVariable("id") int id) {	// If id is not present then it will return Optional Object else Person
+	return repo.findById(id);
+}
+
+// Content Negotiation
+@RequestMapping(path="/home", produces= {"application/json"}) -- which means it only produces json format, eventhough it supports for xml
+@RequestMapping(path="/home", produces= {"application/json", "application/xml"})
+// In this way we can restrict some formats
+
+// POST request -- Insert data
+@PostMapping("/person")
+
+// @RequestBody -- converts json to Object	(Using jackson-core dependency in maven)
+Eg)
+	@RequestMapping("/person/{id}")	// Also @GetMapping
+	@ResponseBody					// Instead of using ResponseBody we can make our controller, RestController
+	public Optional<Person> getPerson(@RequestBody Person person) {	// If id is not present then it will return Optional Object else Person
+		return repo.save(person);
+	}	
+
+
+// DELETE Request
+@DeleteMapping(path="")
+
+// PUT Request -- Update Data
+@PutMapping(path="")
+
+
+ModelAndView mv = new ModelAndView()
+mv.addObject("", var);
+mv.setViewName("");
+
+// JPA
+repo.findById(id).orElse(new Object())
+repo.save(Object)
+repo.deleteByID(id)
+repo.findAll()
+
+
+// Spring Data REST -- No need of controller/RestController
+@RepositoryRestResource(collectionResourceRel="persons", path="persons")
+
+
+// 5 Logger levels
+1) TRACE - It will log everything
+2) DEBUG - More info compared to INFO level
+3) INFO - a little bit of info
+4) WARN - logs only warnings
+5) ERROR - only logs if there are any errors
+
+logging.level.org.springframework = debug		// Here, org.springframework is a package, we can use root in that place to log whole appln
+When I give WARN, it logs WARN as well as ERROR which is beneath it. In same way, When given DEBUG, all the 4 levels starting from it; will be considered

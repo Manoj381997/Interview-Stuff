@@ -1,0 +1,115 @@
+// Spring AOP
+Aspect Oriented Programming
+
+we need to give @Component and then @Aspect to that class if we are using annotations in our project. SO that spring will create an instance of that class as well
+@EnableAspectJAutoProxy
+
+@Aspect, @Configuartion, @Before, @After
+
+Cross Cutting concerns --> log(), security(), transactions
+
+we can run Spring boot appln using CommandLineRunner interface by implementing this in main class(udemy)
+and override run mthd
+
+// To intercept a method
+execution(* PACKAGE.*.*(..))
+ex) PACKAGE -> com.in28minutes.spring.aop.springaop.business
+1) * -> Any return type
+2) PACKAGE -> In a specific package
+3) * -> In a specific package, any class
+4) * -> Intercept all method calls
+5) *(..) -> Intercept all method calls irrespective of args
+
+1) JoinPoint
+Specific execution interception of a method call.
+Which method is being called, we'll know through JoinPoints
+If there are 100 mthds, inside package, then we would have 100 JoinPoints
+
+// @Before -- Usually we use BeforeAspect for Authentication of user, whether the user is entitled for that.
+
+2) PointCut
+What kind of methd to intercept??
+
+execution(* PACKAGE..*.*(..))				// When 2 dots are there next to each other, AOP will start intercepting all/any calls next to each other
+ex) com.in28minutes.spring.aop.springaop	// Here we have given only till package after that we have 2 dots(..), so AOP will intercept all calls inside this subpackage
+Note: Even the springApplication.run() mthd will be intercepted (For better understanding check logger in CLI
+
+The expression is the pointcut execution(* PACKAGE..*.*(..))
+What kind of mthds you want to intercept is called pointcuts
+
+3) Advice --> what??
+what shud I do when I do interception??
+Basically what action shud i perform after intercepting is called Advice.
+
+Aspect --> Combination of PointCut and Advice is aspect
+
+4) Weaving & Weaver
+The process of implementing AOP around mthd calls is called Weaving and the framework which implements is Weaver
+The framework that does the entire logic of making sure that the aspect is invoked at right time is called Weaver and the process of doing that is Weaving
+
+@AfterReturning(value="expression", returning="result")	// The returned value from the methods will be in the result variable
+public void after(JoinPoint joinpoint, Object result) {
+}
+
+@AfterThrowing(value="expression", throwing="exception") // This would intercept any exceptions that are thrown
+public void afterThrowing(JoinPoint joinpoint, Exception exception) {
+}
+
+@After(value="expression")					// common coz we dont know whether it will throw exception or it will be sucessful
+public void after(JoinPoint joinpoint) {
+}
+
+5) @Around advice (Advance stuff)
+Eg) We can find how much time a mthd execution takes.
+@Around(value="expression")					
+public void around(ProceedingJoinPoint joinpoint) throws Throwable {		// ProceedingJoinPoint will intercept mthd and allow mthd excecution to proceed
+	long startTime = System.currentTimeMillis();
+	
+	joinpoint.proceed();	// this will throw an exception, so either use try/catch or throws in the mthd
+	
+	long endTime = System.currentTimeMillis() - startTime;
+	logger.info("Tiem taken by {} is {}", joinpoint, endTime);
+}
+
+// PointCut Best practice
+Create a separate class for expression
+public class CommonJoinPointConfig {
+	
+	//@PointCut(execution(* PACKAGE.*.*(..))
+	@PointCut("execution(* com.in28minutes.spring.aop.springaop.business.*.*(..))")
+	public void dataLayerExecution() {}
+}
+
+
+And in Annotations we can just share Qualified package name for CommonJoinPointConfig.dataLayerExecution()
+like this @Before("package.CommonJoinPointConfig.dataLayerExecution()")
+
+For every layer like DAO, business, etc we can have a separate & common JoinPoints 
+We can combine 2 or 3 JoinPoints like this,
+@PointCut("package.CommonJoinPointConfig.dataLayerExecution() && package.CommonJoinPointConfig.businessLayerExecution()")
+	public void allLayerExecution() {}
+
+// for Beans
+@PointCut("bean(dao*)")		// @PointCut("bean(Dao*)")
+	public void beanStartingWith() {}
+
+@PointCut("bean(*dao*)")		// @PointCut("bean(*Dao*)")
+	public void beanContainingWith() {}
+	
+// Intercept all calls within business or data layers
+@PointCut("within(com.in28minutes.spring.aop.springaop.business..*)")
+	public void businessLayerExecutionWithWithin() {}
+	
+// Custom Annotation & an aspect for tracking time
+
+// only on methods and info shud be available at runtime
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface TrackTime {
+}
+
+Copy this interface TrackTime's Qualified name and create a pointcut
+@PointCut("@annotation(com.in28minutes.spring.aop.springaop.aspect.TrackTime)")
+	public void trackTimeAnnotation() {}
+	
+Now whichever method has @TrackTime annotation on it, will only be executed by the aspect

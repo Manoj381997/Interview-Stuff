@@ -1,0 +1,45 @@
+// Web Service
+Software system designed to support interoperable (able to exchange and make use of information) machine-to-machine interaction over a network.
+
+3 keys
+1) Designed for machine-to-machine(appln-to-appln) interaction
+2) Shud be interoperable (not platform dependent)
+3) shud allow communication over a network
+
+// How??
+1) How does data exchange b/w applns take place??
+	i/p to a web service is called request and o/p from a web service is called response.
+2) How to make web service platform independent??
+	request and response shud be platform independent. So formats can be xml or json (Message exchange format)
+3) How does a appln know the format of request and response??
+
+Service Definition:-->
+Every web service offers a "Service Definition".
+It specifies; Request/Response Format (what is the format used for req and res), Request Structure, Response Structure, Endpoints
+
+Service Provider(Server) - is the web service, Is the one that hosts the web service
+Service Consumer(Client) - Applications are Service Consumers, since they consumes/uses the web service
+Service Definition - Given above
+
+Transport - defines how a service is called. Whther it is exposed over internet or Queue.
+Formats are HTTP, MQ:
+	HTTP: Basically over web
+	MQ: Communication over a queue (both service provider and consumer will listening in queue)
+	
+// SOAP Web service (Simple Object Access Protocol)		--> It is basically a format of XML
+SOAP-Envelope, SOAP-Header (meta info), SOAP-BODY. Service Definition is done by WSDL (Web Service Definition Language)
+
+// REST	--> It is an Architectural Style
+Restful Service are basically exploting HTTP methods
+HTTP Header, HTTP BODY, HTTP Methods (GET, POST, PUT, DELETE) HTTP Status codes
+Resource:-->
+It has an URI (Uniform Resource Identifier) --> /user/manoj/list
+A Resource can have different representations --> XML, JSON, HTML
+Service Definition --> WADL (Web appln Definition Language)or SWAGGER or etc
+
+								REST 			VS 			SOAP
+Approach				Architectural Approach			XML
+Data Exchange Format XML (SOAP XML)	 				No restrictions
+Service Defn		 WSDL			 				No restrictions, not so popularly used WADL
+Transport			 WEB or MQ		 				Web (HTTP)
+Ease				 complexities	 				Very Easy

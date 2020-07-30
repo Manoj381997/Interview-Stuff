@@ -1,0 +1,53 @@
+
+// Spring IOC --> Inversion Of control a.k.a ApplicationContext
+
+1) What are beans ??
+2) What are the dependencies of bean ??
+3) Where to find these beans ??
+
+For logging:->
+	In application.properties,
+	logging.level.org.springframework = debug
+
+// Constructor Injection, Setter(Default) Injection
+If the dependencies are mandatory or imperative , then its recommended using Constructor Injection
+If the dependencies are optional, which means if the program could run without the dependency , then we can use Setter Injection. Even if we use setter or dont use, spring does the same.
+
+@Primary, @Qualifier
+
+// Bean Scope
+1) Singleton - One instance per Spring Context (GOF - Gang of four design pattern perspective one instance per JVM; However with respect to spring one instance per applicationContext)
+2) Prototype - New bean whenever requested
+3) request - One bean per servlet request
+4) session - One bean per session
+   Global Session - New bean per global HTTP session (portlet context)
+
+@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE) - Creates different bean on each request
+@Scope(value=ConfigurableBeanFactory.SCOPE_SINGLETON) - Shares same bean on each request
+
+// We need to set proxy like below in order to make other components realize and that they get a new instance everytime or else it wont notice the component having prototype conf
+@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode= ScopedProxyMode.TARGET_CLASS)	// This makes a proxy to get autowired to the component which is dependent on this class.
+
+// Logger, import org.slf4j.Logger, org.slf4j.LoggerFactory
+private static Logger LOGGER = LoggerFactory.getLogger(Main.class) // or getLogger(this.getClass())
+// Usage
+LOGGER.info("{}", Object);
+
+// Component Scan @ComponentScan()
+
+// @PostConstruct() mthd has a return type of void
+In case if we want to do anything like initializing values etc as soon as the dependencies are created and autowired, we can use this.
+// @PreDestroy() mthd has a return type of void
+Called just before bean is removed out of Context
+
+// JPA is an Interface, defines an API , Hibernate, understands the API provided by JPA and provides implementation
+
+// CDI (context and Dependency Injection) It basically defines annotations, but recommended is Spring annotations since that would be standard, but both are same
+CDI is a Interface, defining how to do dependency injection.
+1) @Inject (@Autowired)
+2) @Named (@Component)
+3) @Singleton (Defines scope of Singleton) instaed of using this @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), we can use @Singleton of CDI annotation
+CDI annotations do the same, bcoz Spring implements CDI
+For using CDI in spring, it has to be added in dependencies in pom.xml
+
+

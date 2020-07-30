@@ -1,0 +1,306 @@
+Architecture:
+	7 Components:
+	1) Template (view-HTML)
+	2) Component
+	3) Modules (grp of components)
+	4) Binding -> Data Binding
+	5) Directives -> ngModel
+	6) Service (obj is injected not created)
+	7) DI
+
+// SPA
+Where main UI is loaded once and then the needed UI is loaded on demand(server)
+
+Routing is used to achieve SPA
+
+Angular is a typescript based binding framework developed by Google
+
+
+	AngularJS					Angular
+1)	Architecture - MVC			Based on Components, Service and Directives
+2)	No DI						DI
+3)	Expression Syntax,			Uses (), [], {{}}
+	ng-directive is used for 
+	image or ppty and an event 
+4)	No Mobile Support			Mobile Support
+5)	JS							TS
+6)	Not so fast					Fast
+7)	Less manageable structure	Simpler structure
+8)	Deprecated					Official updates are available
+9)	Difficult in SEO friendly	Easy to create SEO friendly applns
+	appln environment
+
+Diadv:
+1) Dynamic applns do not always perform well
+2) Learning curve
+
+// Angular universal is integrated with Angular CLI. Angular Universal is a server-side rendering module for angular applns
+
+// Angular Ivy, is a new rendering engine for angular (Available from Angular version 8)
+// Angular Bazel is a powerful build tool and it can keep track of the dependencies b/w different packages and build targets.(Available from Angular version 8)
+
+// for changing port, ng serve --port=8000 // dfault port 4200
+
+
+// testing frameworks
+1) Jasmine -> for unit testing (.spec.ts)	ng test
+2) Karma -> for test runner and execution
+3) Protractor -> End to End test scripts (e2e)	ng e2e
+
+// lint (ng lint)
+
+// How to optimize an Angular app
+1) Consider Lazy loading instead of fully bundled app, if app size is more
+2) Remove unused 3rd party libraries
+3) consider AOT appln
+
+// default Module Bundler in Angular (webpack) other-options are: Gulp, Babel, Grunt
+
+// To export component, we need to put that in exports array in NgModule
+
+// component
+options:
+1) selector	2) template/templateUrl	3) styleUrls
+
+// Angular supports MVC
+Model is data binding, View is Template , Controller is component
+
+types of directive
+
+1) Structural Directive
+	Add/modify structure of HTML DOM --> eg) ngFor
+
+2) Attribute Directive
+	Alters behaviour of an element eg) [hidden]="isVisible" and does not change structure of DOM
+
+3) Component Directive
+	Customized user control, it has its own template
+
+NPM
+	can install any js framework/library easily
+	"node_modules" is the folder where all packages are installed
+
+Package.json
+All references of js frameworks are jotted down.
+
+// TypeScript
+Superset of JS. It adds types to JS. It at end transpiles/converts to JS. It provides OOP concepts. Strongly Typed.
+
+// Angular CLI
+- helps us to create a prj in a rapid way. It will generate all the boilerplate code for us.
+
+ng new myapp
+ng serve
+ng build
+
+Module
+it grps angular components
+NgModule decorator has 3 options:
+1) imports(by default- BrowserModule is given for web appln) 2) declarations 3) bootstrap 4) providers 5) exports- FormsModule
+
+// constructor vs ngOnInit()
+constructor is default for TypeScript class
+ngOnInit() is related to angular and for Angular bindings
+
+
+
+Decorator:	a.k.a // MetaData or Annotations
+It defines what kind of class is this!!! @Component, @Injectable, @NgModule, etc
+
+Template:
+1)Inline (inside ts class file in component)
+2)External
+
+Data Binding
+how view and coponent communicates??
+	Interpolation{{}}, Property binding[], event binding(), two way binding[()]
+
+
+// Lazy loading, to achieve we need to do following;
+	Divide prj into modules
+	Add loadChildren in routing.ts
+	-- Lazy Loading in angular loads Modules asynchronously when the certain route is activated. Lazy loading helps in a faster load of the application as the **initial 
+	   download size** of the application is reduced.
+	   eg) Routes = [
+				{path: '', redirectTo: '/login', pathMatch: 'full'},
+				{path: 'home', loadChildren: './home/home.module#HomeModule'},
+				{path: 'login', component: LoginComponent},
+			];
+	-- when navigated to home routerLink, first it will download that module and then it renders the html in browser and then the file will be cached as rest of files
+	-- Lazy Loading of the component in angular 9 is possible due to the implementation of the ivy compiler in angular 9, so now we can lazy load out component on the condition basic.
+	   The lazy loading also can be used as a dynamic component loading with the benefits of less bundle size.
+// In angular 9, we can lazyLoad components since the inroduction of Ivy compiler
+	-- we need to use ViewContainerRef(var is vcr) and ComponentFactoryResolver(var is cfr)
+	-- The ViewContainerRef creates the component using (this.vcr.createComponent(this.cfr.resolveComponentFactory(SomeComponent)))
+
+ngserve - builds inmemeory (inside ram) (for development its good)
+but for production ng build is good
+
+// ng build --prod (Makes it ready for production) // It compresses the file, removes unnecessary things, comments.
+
+// Angular Component Life Cycle hooks
+constructor()
+// Interfaces -> OnChanges, OnInit, AfterContentInit ...
+ngOnChanges()
+ngOninit()
+ngDoCheck()
+ngAfterContentInit()
+ngAfterContentChecked()
+ngAfterViewInit()		//In case if we want to focus on an input field after view,then we can use this with the help of template ref(<input #nameRef type="text" value="UserName">)
+ngAfterViewChecked()
+ngOnDestroy()
+
+-- Even if onInit interface is not implemented it gets called b'coz since typescript transpiles to javascript , and when it sees any mthd ngOnInit() by default it calls it 
+
+// Attribute & Property
+eg) <input type="text"> - Here, type is an attribute which cannot be changed but text is a ppty which can be altered
+
+// JWT (JSON Web Token)
+header.payload.signature - xxxx.yyyyy.zzzzz (hashing alg is used) payload - is the data stored in JSON Web token. It actually had=s user ID inside the payload., Signature - for verifying the token
+
+// For generating JWT
+jwt.sign(payload, secretOrPrivateKey, [options, callback])
+it is sent to client side and back to server side
+
+// To verify the token sent back to server-side
+jwt.verify(token, secretOrPrivateKey, [options, callback])
+
+// Route Guard
+ng g guard guardName
+
+// Values can be directly altered from template
+<button (click)="userLoggedIn=true">Login</button>
+<button (click)="userLoggedIn=false">LogOut</button>
+
+// Parent to Child passing
+@Input name: string;							-- This has to be used in child component with a variable  (or) @Input("childName") name: string;	-- we can do like this!!!
+<app-child [childName]="parentName"></app-child>		-- We shud use ppty binging with child component's var name in attribute side and parent component's var name in value side.
+
+//How child intercepts the value passed from parent component --In this way we can intercept the value change and we can make further additional changes (this can be done using getters and setters and two way split binding)
+--->	1st approach			// this getters and setters can be used if we are passing only one value to child component
+create a private var in child component
+private _loggedIn: boolean;
+message: string;
+
+get loggedIn: boolean { return this._loggedIn; }
+@Input()
+set loggedIn(value: boolean) { 
+	this._loggedIn = value;
+	if (value === true) { this.message  = 'Welcome back'; }
+	else { this.message = 'please log in'; }
+} 
+
+--->	2nd approach	// ngOnChanges works only with child component and it can be used in scenarios where we need to pass multiple values not just one
+						// additionally SimpleChanges Object provides 3 ppty's which we can use of
+ngOnChanges 		-- has 3 args (previousValue: boolean, currentValue: boolean, firstChange: boolean)
+
+ngOnChanges(changes: SimpleChanges) {
+	const loggedInValue = changes['loggedIn'];
+	if (loggedInValue === true)  { this.message  = 'Welcome back'; }
+	else { this.message = 'please log in'; }
+}
+
+// How to get values from child component to the parent component
+1) Using template references			// Useful when working with nested components and forms
+										// But it only works in parent template. Inorder to make it available in parent ts class, we need to use @ViewChild
+<app-child #child [childName]="parentName"></app-child>
+// We'll imagine like child component has name var assigned with value 'Manoj' and a function called greet(), that alerts alert('hello')
+// In parent template we can directly use {{ child.name}} and <button (click)="child.greet()"/>
+
+2) @ViewChild
+// First In parent component, create like this with ChildComponent class
+@ViewChild(ChildComponent) childComponentRef: ChildComponent;		// Here ChildComponent is the component, which we are trying to change
+// Implement AfterViewInit()
+ngAfterViewInit() {
+this.childComponentRef.message = 'Message from parent component';	// child Component has a var message, and we are changing that in this way.
+}
+
+// child component communicates with parent
+Here we have created a mthd in child component that invokes a mthd n parent component. So in case if multiple child components want to execute the same logic instead of duplicating the code in multiple places it can be done in parent component, and all child components can invoke it...
+
+// parent component
+sayHello() { alert('hello...'); }
+
+// Child component
+@Output() greetEvent = new EventEmitter();		// here we are listening to a button click event and sending out a custom event called greetEvent.
+												// the parent component can catch this event and excecute any piece of code
+callParentMthd() { this.greetEvent.emit(); }
+
+// In parent component's child selector we need to add this
+<app-child (greetEvent)="sayHello()"></app-child>
+
+// we can also pass parameters
+name: string = 'Manoj';										// child component
+<app-child (greetEvent)="sayHello($event)"></app-child>		// Parent component
+sayHello(name: string) { alert('hello...'+ name); }			// Parent Component
+
+// Subject (Observer and Observable) it involves taking notifications from single src and forwarding them from one or more destinations. And a subject is usually placed in a service
+1) create a subject and express the subject as Observable		// Subject is imported from rxjs
+2) Send msg from teacher component to the subject
+3) Subscribe to the Subject from the Student Component, so that the component can react to any msg from the teacher
+
+
+
+
+// Testing
+Karma and Jasmine
+1) package.json -- configuration
+2) angular.json - devDependencies
+3) karma.conf.js
+4) test.ts	-- (shud not be altered)
+
+describe() is a Test Suite that is used to write group of unit test cases together. It has 2 args: name, spec defn
+it  --> It will define the test case we're trying to execute. it has multiple parameters
+expect --> for asserting	expect(add(10, 20)).toBe(30)	// toBe is a matcher, there are many toBe's
+
+// toBe vs toEqual
+toBe uses "===" . It means it compares with content(value) and type
+toEqual uses "==" . Same like toBe but used for deep equality. Compares arrays, Objects..
+
+// String  methods
+expect("This 4th lane of Underworld").toContain('of');				// checks whether contains specified string
+
+// For negative test cases
+expect("This 4th lane of Underworld").not.toContain('hi');			// Use not before toBe, toContain, etc
+
+// toMatch is a regular expression mthd. Inside that mthd we will pass an expression
+expect("This 4th lane of Underworld").toMatch(/\d+/);				// checks whether numbers are present in string
+expect("This 4th lane of Underworld").toMatch("Underworld");		// checks whether is present in given string
+
+To exclude test cases or test Suites use (x) as prefix before the describe like xdescribe or like xit...
+
+// For arrays
+let arr = ['abc', 'def', 'xyz']
+expect(arr).toContain('def'); // true
+
+// beforeEach and afterEach mthds similar to @Before and @After() in Junit
+beforeEach(() => {							afterEach(() => { custService = null; });	// afterEach for nullifying the values
+	custService = new CustService();
+});
+
+// beforeAll() and afterAll() similar to @BeforeClass and @AfterClass in JUnit
+beforeAll(() => {								afterAll(() => {});
+
+});
+
+
+// Arrange - Act - Assert (AAA) Pattern
+Declare var, Call functions, compare
+
+// TestBed (For unit testing components, directives, services)
+It helps us to create a dummy Module (@NgModule). Creating required imports, declarations, providers, etc
+We can create components, it gives us a Fixture and we can validate using it
+
+ComponentFixture is used to give an instance of a component and debugging the component
+fixture = TestBed.createComponent(AnyComponent);
+const compInstance = fixture.componentInstance;		// Gives instance
+el = fixture.debugElement;		// For debugging component
+
+// How to add Service to TestBed. Using SpyOn
+SpyOn helps us to mock the excecution of methods. It is used to check whether a method is called or not
+// We can chain SpyOn method to return a dummy value using --> .and.returnvalue()
+// It can also return original value using --> .and.callThrough()
+
+const var = jasmine.createSpyObj('some name', ["method1", "method2"]);
+
+HttpClientTestingModule	// Its for testing purpose similar to HttpClient which is used in practical

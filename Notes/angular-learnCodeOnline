@@ -1,0 +1,9 @@
+LearnCodeOnline - Angular bootcamp:
+
+Angular - 9 (Version doesnt matter)
+
+main.ts -> This is the place where bootstrapping occurs, which is basically takes the first component which shud be loaded/remembered inorder to display.
+
+
+
+<ng-content></ng-content>

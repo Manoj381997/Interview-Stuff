@@ -1,0 +1,95 @@
+Spring Core
+
+// 2 types of IOC (Both are interfaces) (Spring Container)
+1) BeanFactory -> lazy initialization(objs are created only on request, like when we use getBean()), Annotation based DI is not supported
+2) ApplicationContext -> supports AOP features, Internationalization, aggresive/Eager initialization, Annotation is supported, WebApplicationContext for web applications
+
+1) It creates Bean
+2) Injects DI 
+3) Calls init() method (once obj is constructed, it calls init) @PostConstruct
+
+// IOC
+-> to instantiate the application class
+-> to configure the object
+-> to assemble the dependencies between the objects
+
+// benefits of IOC
+1) Loose coupling
+2) Makes application easy to test
+3) It supports lazy loading services and aggresive/Eager instantiation
+
+// How configuartion metadata is provided to Spring container
+1) XML based configuartion
+2) Java based configuartion
+3) Annotation based configuartion
+
+// Autowiring modes
+1) byNo
+2) byName		check
+3) byType		check
+4) constructor	check
+5) autodetect
+
+// Bean Life Cycle methods are also called as Callback methods as it is automatically called by framework
+@PostConstruct	-- also called init() method (once obj is constructed, it calls init)
+@PreDestroy		-- called before destroying obj from container. It is called only once, just before the obj is being destroyed.
+// these methods can be created in 3 ways;
+1) XML configuartion
+2) Annotation Configuration
+3) Using Interfaces (Not recommended) implements InitializingBean (has init() method), DisposableBean(has destroy() method)
+
+// Exceptions thrown by Spring DAO
+DataAccessException
+
+// Aspect
+Modularization of a concern that cuts across multiple objects (joinPoint and PointCut)
+
+// Advice (edureka)
+Action taken by an aspect at a particular join point
+Types:
+1) around
+2) before
+3) after
+
+// Spring MVC
+WebApplicationContext extends ApplicationContext
+
+// spring-core, spring-context, sl4j (sl4j-api) add these to pom.xml
+
+// @Configuration instead of @SpringBootApplication, If doing in Java way not in XML Way
+
+// this instead of ApplicationContext in Spring Core & has to be closed at the end ac.close(); or shud be using try catch block to enclose evrything inside the block
+AnnotationConfigApplicationContext ac = new AnnotationConfigApplicationContext(Main.class);-> 
+
+// Spring boot automatically defines a ComponentScan but in Spring it does not
+
+
+// Using XML
+applicationContext.xml, under resources dir - next to application.properties
+Main Class, Rather than using ApplicationContext here we use ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(applicationContext.xml);
+
+// To read values from properties file, we use this --> @PropertySource("classpath:app.properties"), this in main class
+// @Value("${external.url}"), this in class where you read the property file
+
+
+// Mockito
+@Mock, @InjectMocks, @RunWith(MockitoJUnitRunner.class)
+Mockito.when(obj.getSomething()).thenReturn(new int[] {1,2,3});
+
+// Spring test
+// Dependencies --> spring-test, junit, mockito-core
+@ContextConfiguartion(classes="SpringMain.class"), @RunWith(SpringRunner.class)
+// For XML file @ContextConfiguartion(locations="/applicationContext.xml")
+// JPA is a Data Access Abstraction used to reduce the amt of boilerplate code  and hibernate is an implementation of JPA and provides loose coupling
+
+
+// Spring vs Spring Boot vs Spring MVC
+Core: Test abilities, DI and IOC. Managing Beans. Loosely Coupled applns so that it'll be easily tested
+	prblm 1: Duplication/Plumbing Code, jdbc try, catch not needed.
+	prblm 2: Good Integration with Other frameworks, like Hibernate for ORM, Junit & Mockito
+mvc: foR WEB applns
+Dispatcher Servlet concerned with front controller
+ModelAndView
+ViewResolver: an view name to physical View
+
+

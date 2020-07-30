@@ -1,0 +1,183 @@
+// Spring Security
+
+// Spring Security is meant for Application Security, providing login/logout functionality and provides certain privileges
+
+Handles vulnerabilities
+1) Session fixation		2) Clickjacking		3) Cross Site Request Forgery(CSRF)
+
+// Features	Spring Security is very Versatile
+1) SSO(Single Sign ON)/Okta/LDAP
+2) User name / password authentication
+3) App level Authorization
+4) Intra Auth Authorization like OAuth
+5) Microservice security (using tokens , JWT)
+6) Method level Security (and also objs in code)
+
+// 5 core concepts in Spring Security
+1) Authentication	(Who are you??)	
+	Types
+	-- Knowledge Based Authentication (Password, Pincode, Answer to secret/personal question)  -> This may not b ecompletely safe as one can impersonate other by having their pwd
+	-- Possession Based Authentication (Phone/Text msgs, Key Cards & badges, Access token device) -> This will only belong to that person
+	-- Multi factor Authentication (2 Factor Authentication) Above 2 like first enter password and then enter OTP from mail or mobile
+2) Authorization	(Can this user do this -> Yes or No) Are they allowed to do this??
+	Admin and normal user will have specific permission
+3) Principal	-- Currently logged In user (User who has been authenticated)
+4) Granted Authority	-- If user tries to do some action in application, and if has authority to it then he is granted to do so
+	Authorities are fine-grained (we create role's for users, whether this role users gets these kind of authorities or not, so which make it simple)
+5) Roles	Authorities and Roles are interchangeable(interchanges or replaceable)
+	Fine Grained Permission are Authorities
+	Course Grained Grouping of Permissions are Roles
+	
+Dependency - spring-boot-starter-security
+
+// Behaviour
+Filters are the ones which are used by spring security to examine all requests which comes and goes
+- Spring Security madates authentication for URL's
+- Adds login form
+- handles login error
+- creates a user and sets a default pwd
+
+To alter username and pwd, go to application.properties and add;
+spring.security.user.name=manoj
+spring.security.user.password=hi
+
+// Authentication
+-- Makes use of AuthenticationManager, we use AuthenticationManagerBuilder to configure
+-- we need to extend WebSecurityConfigurerAdapter and override configure mthd whose arg is AuthenticationManagerBuilder
+step 1: Get hold of AuthenticationManagerBuilder
+step 2: Set the configuration on it
+
+@EnableWebSecurity - that this is a web security config 
+
+// HttpSecurity
+-- we need to extend WebSecurityConfigurerAdapter and override configure mthd whose arg is HttpSecurity
+
+@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests()
+			.antMatchers("/", "static/css", "static/js").permitAll()	// Allows access for everyone, bu ysing permitAll()
+			.antMatchers("/**").hasRole("USER")							// /** is a wildcard, means all paths & sub paths
+			.and().formLogin();											// To specify what based login is needed, here we are using form
+//			.antMatchers("/**").hasAnyRole("USER", "USER2");			// hasAnyRole for selecting multiple users
+	}
+// If we are not authorized for a request we would get a forbidden error (403 status code)
+
+// How spring security begins as soon as adding dependency ?? (In web applns)
+		// Bootstrap
+Step1: It first adds a filter that intercepts before the request goes to the servlet. Filters do any processing and manipulate the request before it goes to servlet
+	   One URL request is typically handled by One Servlet method
+	   First, /* Spring uses this mapping to intercept all requests using Filters in web applns
+	   DelegatingFilterProxy - it delegates to a bunch of specific spring filters (like authentication filters, authorization filters, etc)
+	   // Authentication
+step1: input would be credentials, output would be a Principal (info about loggedin user)
+	   It keeps track of both i/p and o/p using an obj of type Authentication, its an internal spring security interface. It is responsible to hold credentials before authentication and if the credentials are valid then it returns a Obj of type Authentication that holds Principal instead of credentials(It clears out credentials) which is actually info abt user
+	   -- AuthenticationProvider (this is responsible for doing actual authentication) Its an interface has a method called authenticate() method
+An appln can have any Authentication maybe login using credentials or LDAP, or SSO, or OAuth. In the same way an appln can have multiple AuthenticationProviders, each one knowing how to authenticate specific authentication. To manage these different types of AuthenticationProviders, there is a AuthenticationManager which is an interface with a method authenticate() mthd. ProviderManager implements AuthenticationManager. this will ask all the other AuthenticationProviders.
+For eg) If app supports OAuth, then ProviderManager will ask all the AuthenticationProviders one by one asking whether it supports OAuth or not. If it finds then it will delegate the work to it.
+
+// supports() method of AuthenticationProvider whose return type is boolean, where it mentions which type of authentication it supports. Also this supports() method is the one that ProviderManager will calls to find the right AuthenticationProvider for each and every authentication attempt
+
+// UserDetailsService class with method loadUserByUserName
+After getting user details, AuthenticationProvider has to fetch/extract data from db or somewhere to verify. this retrieving part is taken care by UserDetailsService class
+It takes in a username and returns an object with User details. This obj is of type UserDetails
+this obj is used by AuthenticationProvider and it uses the very same obj directly as the Principal Obj that gets populated into the Authentication Object
+
+And then this Authentication Obj will go back to Authentication Filter . After receiving the Authentication Obj it will save it in **ThreadContext (ThreadLocal obj)
+So every request will verify the Authentication obj in Thread local, so thats why only once Authentication happens not for each request
+If Authentication is not successful in AuthenticationProvider, it wil throw an Exception which will bubble to the Authentication filter. 
+
+i/p request -> AuthenticationManager (authenticate()) -> appropriate AuthenticationProvider (authenticate() and supports()) -> UserDetailsService() (loadUserByUserName) -> AuthenticationProvider; After verify If success send info else throw Exception -> AuthenticationManager -> o/p (Authentication type/ Principal Obj -> Filter -> thread Context / Local
+
+// and() in spring security (Spring security follows Builder pattern and method chaining is in effect)
+It brings an object in the state as the same state of a new object
+
+// jdbc connection
+auth.jdbcAuthentication()
+		.dataSource(dataSource)
+
+auth.ldapAuthentication()
+
+// LDAP (Lightweight Directory Access Protocol) - Its a protocol for accessing and maintaining distributed directory information services over Internet
+Store organisational information
+A typical organisation has departments, managers, and people reporting to other people. so its kind of like tree of information. So LDAP is perfect for that
+They use it to maintain organisational information and also to maintain user info and healthwith info
+// Here we are using local LDAP server for development purpose, so we add dependencies like (unboundid-ldapsdk) -> which is a open src ldap server
+and spring-ldap-core -> Integration lib which works with ldap and spring-security-ldap which integrates with security and ldap
+
+In application.properties
+spring.ldap.embedded.port=8389								// In this port our local ldap instance will run
+spring.ldap.embedded.ldif=classpath:ldap-data.ldif			// (ldap data interchange format is a syntax) reference
+spring.ldap.embedded.base-dn=dc=springframework,dc=org		// this tells the embedded ldap what the root node is
+
+so we need to create ldap-data.ldif file in resources and  copy paste the code from internet
+so the 3rd property starts from right to left, org is the root node, and then comes springframework. These will map to the ldap-data.ldif. that org and springframework can be anything related to what we have given in our ldif file
+
+// JWT (JSON Web Token)	For Securing Web applns and for Microservices
+JWT focussed on Authorization
+
+Authorization Strategies (2 popular options  where web applns use to remember sessions)
+1) Session Token	-> Reference token (reference to a state)
+2) JSON web token	-> Value Token (Contains the value itself)
+
+HTTP - Its a Stateless Protocol	(Doesnt remember past states)
+In static web applns the server doesnt need to remember previous request. Each request is self-contained, for each request you would get a response
+If web appln is Dynamic response and it depends on who the user is. then there arises a problem. So here we need to send our identity along with the request
+
+Session ID + Cookies  --> Popular mechanism but with some problems
+1) Assumes there is always only one Monolithic server web application  but modern web apps have multiple servers sharing load using load balancer
+
+so in jwt the problem is handled by sending the data itself in JSON object in a special signed  format
+// Its a way for client and server to communicate and share info directly that has some meaning across multiple interactions without the server having to remember info for each client
+
+// Structure of JWT (How it is created, parts of JWT, How we can construct and deconstruct a JWT and adv & disadv)
+whats JWT -> Token with a JSON value
+structure of JWT:-> 
+(Refer telusko)
+
+1) Authentication
+2) Authorization
+3) Bcrypt	-- it is based on BlowFish Cipher. It is based on hashing but for N number of rounds
+4) OAuth
+
+Create a class extend WebSecurityConfigurerAdapter, which actually gives all configs
+
+@Configuration
+@EnableWebSecurity
+public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+	@Override
+	protected Configure(AuthenticationManagerBuilder am) {
+	}
+	
+	@Bean													// We shud make it bean as well
+	@Override
+	protected UserDetailsService userDetailsService() {		// for providing our own username and password
+		
+	}
+	
+	@Autowired
+	private UserDetailsService userDetailsService;			// Its an Interface, we need to create a class separately and implement this	
+	
+	// For interacting with db
+	public AuthenticationProvider authProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();	// Responsible to talk with db
+		provider.setUserDetailsService(userDetailsService);
+		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());			// Bcrypt --> (new BCryptPasswordEncoder())	  NoOpPasswordEncoder --stores&retrieves pass in plain txt
+		return provider;
+	}
+		
+}
+
+
+// To create our own form rather than spring provided one
+we shud first create a jsp file under src/main/ webapp/		(webapp is a folder which we create as a convention)
+// create login.jsp and logout.jsp
+So we need to override configure(HttpSecurity http) method in the above class
+
+
+// ${SPRING_SECURITY_LAST_EXCEPTION.message} --> message if any exceptions occure during loggin in
+
+//OAuth
+@EnableOAuth2Sso		-- This shud be put above the class AppSecurityConfig
+and shud override configure mthd

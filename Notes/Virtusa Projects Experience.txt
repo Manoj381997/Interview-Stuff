@@ -1,0 +1,29 @@
+// Virtusa Projects Experience
+
+1) Citi Direct (14 months)
+Its a Corporate Banking Application
+- I worked in 3 components totally on a span of 14 months
+1st component is a service layer, where I was handling Business logic using Spring and its modules. Worked in Hibernate, Spring and MVC
+
+2nd component is a Digitization, where its more or less the same job. here I worked in spring Rest and JPA
+
+In 3rd component, it was a angular based module, where 6 of us including me worked in UI pages. Ihis module was not related to backend component which I previously worked. This was trade component. I played my part by creating some new endpoints related to the documention provided by Citi. They actually had a good documentation on their endpoints.
+We made use of JWT tokens for authentication and authorization. I worked in migrating few of their components. Aprt from them made effective use of ways to interact with components by using services and @Input and @Output decorators.
+For getting a chance to work in that team was a little problematic at first. They only wanted experienced candidates, but when I volunteered they hesitated to put me in that team. And then I revealed my personal interests to them by showing my projects which i contributed during my leisure time. And then after some time they agreed and let me work in that team.
+But In Citi its not like any other projects which I've known, when we work in some team (particualry in a tech) we are supposed to undergo an assignment. I mean Citi will assess their employees before billing them. So i had first done my Java Assesment and then I had to do Angular as well. We are supposed to cross 80 % in that assessment to clear that.
+
+
+2) IBM Watson HIE
+
+Here I made use of Spring AOP, @Around concept to figure out which mthd took long time to exceute the report generation
+Spring Boot and the rest is same with Angular
+The Angular team here consisted of only 4 with me including. We migrated the project from angular 5 to angular 8 with observables of rxjs and many more.
+
+Here Basically everything is REST. I mean the prj is about
+
+Health Insights Explorer is one of the applications under the portfolio of IBM Health Insights. The application is linked to an integrated warehouse of medical 
+claims data. The curated data set in the application enables guided analytics to understand the cost, use and quality of the Payer (Ex: Insurance companies) services, and Provider (Ex: Hospitals) practices. Users can create reports and dashboards to perform ad-hoc data investigations by drilling down to claim level details and easily uncover actionable insights. I’m part of Payer applications, and there are many apps actually which come under payer applns and I'm part of HIE which is responsible for providing data to generate reports and dashboards for users
+I developed a full feature for them to filter those info based on their requirements, for that I had to first created a post endpoint for them to submit with some keywords, after fetching the values via the URI, I made a call to db for fetching relevant info , If present I would fetch and process or else I would throw a notFound msg. And then while processing the data I created a class where I can map the extracted values and then I was supposed to Ignore few values among them and then send the rest
+
+I developed a separate feature for providing endpoints for (**) where I had to create relevant classes to map the values along with some security features since this feature was not available to few customers.
+The DB follows Star database

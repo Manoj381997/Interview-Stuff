@@ -1,0 +1,20 @@
+// Interview Experience
+
+1) Which http mthd is used for fetching login fields --> POST mthd (http -> method)
+
+2) In future if we dont want to have any db issues --> hazelcast (Caching shud be used)
+
+3) Diff b/w Web Service and Restful service
+
+4) How an endpoint is authenticated and authorized
+
+5) How do we validate when there is an issue in an endpoint
+
+6) Whats Pair Programming??
+Pair programming is an agile software development technique in which two programmers work together at one workstation. One, the driver, writes code while the other, the observer or navigator, reviews each line of code as it is typed in. The two programmers switch roles frequently.
+Advs :->	Two heads are better than one. If the driver encounters a hitch with the code, there will be two of them who'll solve the problem.
+			More efficient. ...
+			Fewer coding mistakes. ...
+			An effective way to share knowledge. ...
+			Develops your staff's interpersonal skills.
+

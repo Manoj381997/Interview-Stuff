@@ -1,0 +1,25 @@
+// Types of HashMap
+import java.util.*;
+
+Most applns populate the map once and then read many times from many threads
+1) ConcurrentHashMap
+2) SynchronizedMap
+3) HashMap					-- (Not Thread Safe, no guarantee in insertion order) To make it thread safe, need to use Synchronized when manipulating from multiple threads
+4) HashTable				-- (Synchronized and Thread Safe and Null keys are not permitted)
+5) IdentityHashMap		
+	-- It compares objects by reference , not logically like HashMap
+	-- Uses Identity to store and retrieve key values. Uses reference equality '==' eg) r1==r2 (key1 == key2) rather than r1.equals(r2) (logical equality) which makes it **faster
+	-- IdentityHashMap uses '==' for equality check whereas HashMap uses equals()
+	-- for hashing IdentityHashMap uses System.identityHashCode(givenKey) rather than givenKey.hashCode();
+	-- IdentityHashMap doesnt require keys to be Immutable, but HashMap it is safe to use immutable objects since this depends on hashCode() and equals()
+	-- Interned Strings - Memory footprint is comparatively smaller than HashMap
+6) EnumMap
+	-- Not Synchronized, Null keys are not permitted, faster than HashMap
+	-- EnumMap is Ordered Collection and maintained in natural order of their keys
+	-- All the keys in an enum map must come from a single enum type that is specified explicitly or implicitly when the map is created
+	-- Eg) Map<Days, String> map = new EnumMap<Days, String>(Days.class);	map.put(Days.SUNDAY, "1");	map.put(Days.MONDAY, "1");	map.put(Days.TUESDAY, "1"); etc
+7) WeakHashMap
+	-- 
+8) LinkedHashMap			-- (Similar to HashMap, insertion order is guaranteed, maintains doubly linked list of all entries internally)
+9) ConcurrentSkipListMap
+10) TreeMap					-- (Implementation of SortedMap and NavigableMap i/f's, insertion order is "Natural Order", Not Synchronized)

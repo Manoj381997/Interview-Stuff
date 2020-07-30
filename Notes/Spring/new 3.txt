@@ -1,0 +1,64 @@
+// Spring REST
+
+// H2
+Its an In-memory db. It's simple. For learning Stuff
+In In-memory db whatever changes are done, once we restart server everything will go away
+
+(spring-starter-jpa)
+
+Spring Boot version 2+ has a minor change.
+1) All DDL(Data Definition Language) - Table Creations should be done in schema.sql (CREATE, RENAME, DROP, ALTER, TRUNCATE)
+2) All DML(Data Manipulation Language) - Data Updates should be done in data.sql (INSERT, UPDATE, DELETE)
+
+// Usage of JdbcTemplate
+@Autowired
+JdbcTemplate var;
+var.query("select * form person", new BeanPropertyRowMapper<Person>(Person.class))
+
+// CommandLineRunner is implements in main.class and need to override run(String... args) mthd
+
+//Adv over JDBC with respect to Spring JDBC(JdbcTemplate)
+Uses less code, prevents from making mistakes( no conn handling)
+
+// For fetching all list (jdbcTemplate.query("query", new BeanPropertyRowMapper<>()))
+// For fetching one record based on ID (jdbcTemplate.queryForObject(".... where id=?", new Object[] {id}, new BeanPropertyRowMapper<>()))
+// For deleteingId or updating anything jdbcTemplate.update("query", new Object[] {}); No rowMapper since we are not mapping any row here
+// provide query in lowercase
+// for insert, jdbcTemplate.update("insert into person (column fields) "+ "values(?,?,?,?)", new Object[] {values}, new BeanPropertyRowMapper<Person>())
+
+// Custom RowMapper -- when to use, In case if table defn is different from Bean defn then we shud use it
+we need to create a class and implements RowMapper<BeanName> in it which insits you to override mapRow() mthd
+
+In JDBC we usually write queries and map them with values using Object array and we'l map it to bean using mapRow
+so here comes the use of JPA Java Persistence API
+JPA is an interface which defines set of annotations and a set of interfaces, Hibernate(ORM Framework) is the popular implementation for JPA. So JPA is an interface and Hibernate is the class.
+Mapping an Object(Person) to a relation, ORM...
+
+@Entity, @Table(name=""), @Id, @GeneratedValue, @Column(name="")
+Constructor is a must with no args and another constructor with args for setting those values
+
+@Transactional
+Transaction Management,whenever we insert, delete, update  database transaction is significant
+Ideally transaction are set around Business Services, but can also be given around repositories
+
+To connect to DB
+EntityManager is the interface for @PersistenceContext
+
+@PersistenceContext
+EntityManager var;
+var.find(Person.class, id);
+
+// For Update or Insert, we shud call merge()
+ver.merge(Object-Person) --> Working --> If ID is set in object, then it means it shud be updated in db or else It will be Inserted
+
+//For delete by ID
+Person per = findById(id)
+var.remove(per)	#Void is the return type for this operation
+
+// Find all (HQL) (JPQL - Java Persistence Query Language)
+TypedQuery<Person> tq = var.createNamedQuery("find_all_persons", Person.class)
+return tq.getResultList()
+and @NamedQuery(name="find_all_persons", query="select p from Person p") in the Entity Class
+
+// Spring Data
+Predefined Repositories, 

@@ -1,0 +1,216 @@
+// Spring IOC --> Inversion Of control a.k.a ApplicationContext
+
+1) What are beans ??
+2) What are the dependencies of bean ??
+3) Where to find these beans ??
+
+// Adv
+1) Provides Auto-Configuration
+2) Creates Stand Alone Application
+3) provides embedded servers, servlet containers jetty to Avaoid usage of WAR files.
+4) Maven (pom.xml) reduces developers effort
+5) Provides CLI to test and develop application
+6) Spring Boot starters
+7) consists of a wide range of API's for monitoring and managing applications in dev and prod
+8) Integrates with Spring EcoSystem like  Spring JDBC, ORM, Data, Rest, Security.
+
+// External Configuration
+1) Application properties
+2) Command line properties
+3) profile specific properties
+
+// @Component -> Generic Component
+We use different annotations so that we can classify our components into diff categories and apply diff logic 
+@Respository -> Spring provides default Exception translation facility (JDBC exceptions)
+@Service -> If we want to log everything in Service annotated classes in that case we can use this. We can use AOP to identify these and log all
+@Controller - For MVC Pattern
+
+// when a spring boot application, is executed as Java application, then it automatically launches up the tomcat/glassfish server, then it starts executing appln
+
+// Spring boot starter makes development easier and rapid (refer down)
+
+// Spring boot actuator --> we can see what is happening inside a running application
+// provides a very easy way to access the production-ready REST Points and fetch all kinds of info from web
+// these points are secured using Spring Security's Content Negotiation strategy
+
+// thymeleaf
+Its a server-side Java Template Engine used for web applns. it aims to bring natural template for your web application and can integrate well with Spring framework and web appln.
+
+// Spring Initializer is a web tool provided by spring . With the use of this we can create spring boot prjs by just providing project details
+// Give Group, Artifact, ad dependencies which are needed
+
+// To enable http support in spring boot --> server.http2.enabled = true
+
+// to create a custom endpoint in spring boot, use @Endpoint annotation
+// Spring boot also exposes endpoints using @WebEndpointor, @WebEndpointExtension over HTTP with the help of Spring MVC, Jersey etc
+
+// To disable auto configuartion, @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class}), If class is not in classpath, then @EnableAutoConfiguration(excludeName={Sample.class}) OR can use spring.autoconfigure.exclude propert in application.properties; to add multiple classes use comma-separated.
+
+// To deploy spring boot application as JAR or WAR files
+add plugin "spring-boot-maven-plugin" with <packaging> tag as jar/war 
+
+// @ConfigurationProperties --> Is the centralized approach
+
+// How to load Yaml file in spring boot
+1) Use YamlMapFactoryBean to load YAML as Map
+2) Use YamlPropertiesFactoryBean to load YAML as Properties
+
+// How Hibernate is chosen as default implementation for JPA without any configuartion
+Spring boot automatically auto-configures Hibernate as the default implementation for JPA whenever it sees Hibernate in classpath since spring-boot-starter-data-jpa is added to pom.xml
+
+// in which layer, shud the boundary of a transaction start??
+The boundary of the transaction shud start from service Layer since the logic for the business transaction is present in this layer itself.
+
+// @Profile , 
+
+
+// How to add Js code file, create static folder under resources 
+
+// default name of h2 database is spring.datasource.name=testdb (name of datasource)
+// localhost:8080/h2-console
+
+// Beans can be created in 3 diff ways
+1) XML
+2) @Configuration class, with @Bean methods
+3) @Component using @ComponentScan
+
+@PropertySource("classpath:resource.properties")
+In property file add a property college.name = Hi (Dont use apotrophe's coz you will get them as it is
+and then use @Value("${college.Name}") over the variable where you want to inject the value
+Eg)
+@Value("${college.Name}")
+private String collegeName;
+
+@Qualifier has priority over @Primary, if we use both of them same time
+
+If we provide @Required above a variable and not provide a value to it, it will throw an error
+@Required						// It shud be given above set method of collegeName
+private String collegeName;
+
+@Autowired
+1) byName
+2) byType	// By Default Spring goes for type	eg) Laptop laptop;	for name we shud use Qualifiers
+3) constructor	// but for this we also shud also have no-arg constructor for the main obj to be instantiated
+
+@SpringBootApplication is a amalgamation of @ComponentScan, @Configuration(AutoConfiguartion), @EnableAutoConfiguration. Called as Main or bootstrap class
+@EnableAutoConfiguration is a combination of @ComponentScan, @Configuration
+@SpringBootApplication, enables Spring context, auto configuration, component scan
+
+ConfigurableApplicationContext con = SpringApplication.run(Application.class, args);
+
+// Auto Configure
+Auto configure classes are responsible for creating these beans.
+Spring looks at 2 things
+1) Classes available on CLASSPATH
+2) Existing (Beans which are) configuration for the application; based on these 2 spring boot provides configuration needed to configure the appln with these frameworks; so this called Auto-Configuration
+If it finds Spring MVC, it will configure View Resolver; if it finds like spring-webmvc, it will configure Dispatcher Servlet
+To know more abt it, we shud turn on DEBUG in application.properties
+
+// To configure folder directory
+spring.mvc.view.prefix=/pages/			// By default Spring (Auto-Configuration) would navigate us to webapp, but then we might keep our files in sub-directory so we can do like this
+spring.mvc.view.suffix=.jsp				// For view extensions, maybe in future we might change that to thymeleaf in that case chnagining here alone will make everything work fine
+
+For logging:->
+	In application.properties,
+	logging.level.org.springframework = debug (OR) logging.level.root = debug (root will set for entire appln whereas we can specificly mention for certain packages)
+
+// Spring Boot Auto-Configuration
+logging.level.org.springframework = debug
+when we use above we'll get lot of details. In that Auto-Configuration Report will be there
+where DispatcherServletAutoConfiguration , this is responsible to match classes found in classpath
+Similar to that ErrorMvcAutoConfiguration, is there which matches classes found on classpath and configures error page for it
+And HttpMessageConvertersAutoConfiguration is responsible for converting to JSON (Here, message coverter is Jackson)
+
+// Constructor Injection, Setter(Default) Injection
+If the dependencies are mandatory or imperative , then its recommended using Constructor Injection
+If the dependencies are optional, which means if the program could run without the dependency , then we can use Setter Injection. Even if we use setter or dont use, spring does the same.
+
+@Primary, @Qualifier
+
+// Bean Scope
+1) Singleton - One instance per Spring Context (GOF - Gang of four design pattern perspective one instance per JVM; However with respect to spring one instance per applicationContext)
+2) Prototype - New bean whenever requested
+3) request - One bean per HTTP request
+4) session - One bean per HTTP session
+
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE) - Creates different bean on each request
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) - Shares same bean on each request
+
+// We need to set proxy like below in order to make other components realize and that they get a new instance everytime or else it wont notice the component having prototype conf
+@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode= ScopedProxyMode.TARGET_CLASS)	// This makes a proxy to get autowired to the component which is dependent on this class.
+
+// Logger, import org.slf4j.Logger, org.slf4j.LoggerFactory
+private static Logger LOGGER = LoggerFactory.getLogger(Main.class) // or getLogger(this.getClass())
+// Usage
+LOGGER.info("{}", Object);
+
+// Component Scan @ComponentScan("package") --> once provided package, it will scan that whole package for components
+
+// @PostConstruct() and @PreDestroy() mthd has a return type of void
+In case if we want to do anything like initializing values etc as soon as the dependencies are created and autowired, we can use this.
+// @PreDestroy()
+Called just before bean is removed out of Context
+
+// JPA is an Interface, defines an API , Hibernate, understands the API provided by JPA and provides implementation
+
+// CDI (context and Dependency Injection) It basically defines annotations, but recommended is Spring annotations since that would be standard, but both are same
+CDI is a Interface, defining how to do dependency injection.
+1) @Inject (@Autowired)
+2) @Named (@Component)
+3) @Singleton (Defines scope of Singleton) instaed of using this @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON), we can use @Singleton of CDI annotation
+CDI annotations do the same, bcoz Spring implements CDI
+For using CDI in spring, it has to be added in dependencies in pom.xml
+
+
+// To deploy a spring boot application as WAR or JAR files, we need to add a plugin to the dependency in pom.xml; <plugin>spring-boot-maven-plugin</plugin>
+// It contains an embedded server and inside <packaging> tag, we need to mention corresponding WAR or JAR.
+
+// Spring Boot Developer Tools (spring-boot-devtools)
+For hot restart, instead of restarting the server then and then for a change. But during hot restart only dependencies related to application will be reloaded not all dependencies that happens only when we do manual restart
+
+// Spring Boot
+- goals: Enable building production ready applications quickly
+		 Provide common non-functional features
+- embedded servers
+- metrics
+- health checks
+- externalized configuration
+
+What Spring Boot is NOT!
+ZERO code generation
+Neither an application server nor a web server
+
+Features
+Quick Starter Projects with Auto Configuration
+ - Web
+ - JPA
+Embedded Servers - Tomcat, Jetty or Undertow
+Production-ready features
+ - metrics and health checks 
+ - externalized configuration
+ 
+starter projects: like, starter-web, starter-jpa, starter-security
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+provides, webmvc, spring core, rest,springsecurity,Internationalisation, logging, etc
+
+// To implement Internationalisation, we need to implement messageSource, localeResolver in applicationContext.xml as beans
+
+// DispatcherServlet
+
+// Actuator - Monitors the appln
+It basically gets us meta data about appln, like what are the beans that have been configured, what are the auto configuration have worked, how many times a specific service is called?? or how many times it has failed??
+
+// Rest services are dependencies,  HAL Standard, hal browser (spring-data-rest-hal-browser) is the dependency
+In application.properties
+management.endpoints.web.exposure.include=*
+we are enabling web exposure, but it will also make a performnce impact as well
+In halbrowser,
+auditevents- is the one which shows how many users properly validated and how many failed authentication
+beans- we could see all our bean classes here
+health
+conditions - autoconfigutaion, negativeMatches
+mappings - urls
+etc

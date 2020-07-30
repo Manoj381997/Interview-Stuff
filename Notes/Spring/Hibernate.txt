@@ -1,0 +1,194 @@
+// Hibernate (Telusko)
+
+// JDBC	(username, pass, Driver, URl)
+1) Load Driver
+2) Get a connection
+3) Execute Query (createStatement, executeQuery() --> ResultSet) executeUpdate()
+
+
+// Conf..
+driver Class -> mysql.Driver
+connection URL -> jdbc.mysql://localhost:8080/db-name
+username -> -----
+password -> -----
+
+
+//
+Configuration con = new Configuration().configure().addAnnotatedClass(Person.class)
+ServiceRegistry reg = ServiceRegistryBuilder().applySettings(con.getProperties()).buildServiceRegistry()
+SessionFactory sf = con.buildSessionFactory(reg)
+Session ses = sf.openSession();
+
+// for multiple classes 
+Configuration con = new Configuration().configure().addAnnotatedClass(Person.class).addAnnotatedClass(Student.class)
+
+Transaction tx = ses.beginTransaction()
+ses.save(personObject)
+tx.commit()
+
+@Entity and @Table are 2 diff. things
+If we dont want our entity name to be same as table name then after @Entity, give @Table(name="table") so that entity name wont be same as Table name
+
+@Id, @Column(name="")
+@Transient -- When this annotation is put on a column that wont be persisted in the table
+
+// get vs load	(Performance difference and provides Exceptions)
+session.get(Person.class, primary-key);
+
+eg) Laptop lap = session.get(Laptop.class, 2);		// get() will actually hit the database. It gives the object directly
+	Laptop lap = session.load(Laptop.class, 2);		// It follws Lazy loading. which means the sql is generated only when requested or used like this --> sysout(lap). It gives 
+													// proxy Object (fake obj)
+eg 2) Laptop lap = session.get(Laptop.class, 100);	// Here we are using primary key as 100, but it doesnt exist in db. so it throws null
+	  lap.getName()									// this will throw NullPointerException
+	  Laptop lap = session.load(Laptop.class, 100);	// here it will throw ObjectNotFoundException
+
+@Embeddable - when we are using another class instance in an Entity class, the other class has to be annotated with @Embeddable; Else hibernate will confuse it with Entity & throw exception.
+
+Important XXXXX
+// Relationships (refer telusko for more clarity -> Hibernate tutorial)
+Eg)
+@OneToOne
+@OneToMany
+@ManyToOne
+@ManyToMany
+
+
+If a student has dependency on laptop, then it has OneToOne relationship with student
+@Entity
+public class Student {
+	@Id
+	private int id;
+	private String name;
+	private int marks;
+	@OneToOne								@OneToMany(mappedBy="stud")
+	private Laptop laptop;					private List<Laptop> laptops;	// In case if student has many variations of laptops in his possession, like Hp, Dell, etc
+}
+
+// 2 types of Fetching techniques
+// FetchType.EAGER or FetchType.LAZY for OneToMany. By Default its Lazy
+@OneToMany(mappedBy="", fetch= FetchType.EAGER)
+
+
+// Caching
+To fetch same data multiple times, we can use cache rather than hitting db again and again
+
+Defaultly given by hibernate, first level cache
+1) first level cache (session 1) If we are in same session and firing same query then hibernate provides this level
+2) Second level cache (Regardless of no. of sessions in an application, we can use this) (2nd level cache has to be configured manually)
+	Conf. with 3rd party providers
+	i) ehcache (recommended)
+	ii) OS
+	iii) swarm
+
+ehcache :-> dependencies in pom are (ehcache, hibernate-ehcache)
+In hibernate.cfg.xml file, set a property for second level cache, so that hibernate will know that we are using 2nd level cache
+
+Entity -> @Cachable
+@Cache(usage="CacheConcurrencyStrategy.READ_ONLY") or READ_WRITE or NONE(where 2nd level caching doesnt take place)
+
+// By default hibernate caching is meant for get() mthd , but to support it for query we need to follow below approach
+// use_query_cache
+Add one more property to hibernate configuration file
+
+Eg)
+Query q1 = session.createQuery("from Person where pid = 101");
+q1.setCacheable(true);
+
+// HQL
+Query q1 = session.createQuery("from Person where pid = 101");
+Person p = (Person) q1.uniqueResult() // for fetching one single record and typecast Person Class
+
+Query q1 = session.createQuery("from Person");
+Person per = q1.list() // for fetching multiple records
+
+for (Person p: per) {
+}
+
+// select specific colmns
+Query q1 = session.createQuery("select rollno, name from Person where rollno=1");
+Object[] per = (Object[])q1.uniqueResult()
+
+for (Object p: per) {
+}
+
+// for multiple records
+Query q1 = session.createQuery("select rollno, name from Person where rollno=1");
+List<Object[]> per = q1.list() // for fetching multiple records
+
+for (Object[] p: per) {
+sysout(p[o] +""+p[1]+""+p[2]);
+}
+
+Query q1 = session.createQuery("select sum(marks) from Person p where p.marks > 50");
+Long per = (Long)q1.uniqueResult() // If only one column is returned then we can mention that rather than using Object class and sum always return Long
+sysout(per)
+
+// send parameters to query
+int marks = 50;
+Query q1 = session.createQuery("select sum(marks) from Person p where p.marks > :marks");
+q1.setParameter("marks", marks);
+Long per = (Long)q1.uniqueResult() // If only one column is returned then we can mention that rather than using Object class and sum always return Long
+sysout(per)
+
+// Native Queries
+// using SQL Queries
+SQLQuery sql = session.createSQLQuery("select * from student where marks > 50");
+sql.addEntity(Student.class);
+List<Student> li = sql.list();	## If we are using *, I mean if we fetch all columns of student class then give generic in List else not
+
+for(Student s : li) {
+}
+
+//
+SQLQuery sql = session.createSQLQuery("select name, marks from student where marks > 50");
+sql.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+List li = sql.list();	## we are assigning values to map(dict())
+
+for(Object s : li) {
+	Map m = (Map) s;
+	sysout(m.get("name") +" "+m.get("marks"));
+}
+
+// Hibernate Object States (Persistence Life cycle)
+
+1) Transient	( When an obj is created in hibernate or anywhere by default its transient, which means it will be expunged once appln or prgm ends)
+2) Persistent	( But when an obj is persisted or saved then it will be available in db)
+3) Detached		(Basically everytime we do a change it will affect Db, but if we dont want the change to happend in db then we need to detach() or stop the session before changing)
+4) Removed		( once the obj is removed, removed() then it is moved to removed state)
+Whenever we try to find() or get() the obj is moved to Persistent State... Coz even after getting if we change anything it will impact db
+
+1) eg) Transient state
+	Session ses = sf(SessionFactory).openSession()
+	ses.beginTransaction();
+		Laptop l = new Laptop()
+		l.setId(1);							// Currently the obj is in Transient State
+		l.setName("HP");					// The values set inside this obj, if not persisted will be gone once session is done
+		l.setCost(1000);
+	ses.getTransaction().commit();
+2)
+	ses.beginTransaction();
+		ses.save(l)							// here the obj is in Persistent State
+		l.setCost(500);						// here though we have altered after save and we havent saved the obj after altering. the obj (l (Laptop)) is still in persistent state,
+											// So whatever changes are done will reflect DB. 
+	ses.getTransaction().commit();
+		ses.detach(l);						// Now the obj is in detached state, so now changes done to obj are not reflected, but after commit() it will go to detach so need of this
+											// statement
+		l.setCost(900);						// This wont reflect db
+
+4) ses.remove(l)							// Removes from persistent state
+
+// JPA	Its just a specification, so we need any ORM tools for implementation
+
+ORM tools -> Hibernate, iBatis, TopLink
+
+The adv of JPA is in case if we build our appln on JPA, then changing the ORM tools would be easy. But if it done purely on Hibernate and switching to iBatis would be cumbersome.
+
+EntityManager -> Interface
+
+EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+EntityManager em = emf.createEntityManager();
+	Alien a = em.find(Alien.class, 2);
+	OR
+	em.getTransaction().begin();
+	em.persist(a)
+	em.getTransaction().commit();

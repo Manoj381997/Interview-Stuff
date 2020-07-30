@@ -1,0 +1,27 @@
+// Inner Classes
+(Refer telusko videos for Inner class and JavatPoint)
+Types:
+1) Member Inner Class					- A non-static class that is created inside a class but outside a method is called member inner class.
+2) Nested Inner Class (Static classes)
+3) Local inner class					- Created inside a method
+4) Anonymous Inner Class
+5) Anonymous Inner Class - Lambda Expression
+
+
+class Person {
+	public void greet() {
+	 sysout("Hello Student");
+	 }
+}
+
+If you want to make use of Person class greet() method but want to say "Hi Sir" rather than "Hello Student", then we need to inherit this class and override method, but we can make this more efficient by using Anonymous Class
+
+Eg)
+
+Person student = new Person()				(OR)  Person student = () -> sysout("hi Sir");	// Since only one line else use braces
+{
+	sysout("Hi Sir");
+};
+
+we can call both by using student.greet()
+// Note: In order to use this it has to be functional Interface(Interface with one method, SAM Interface)

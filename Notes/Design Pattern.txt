@@ -1,0 +1,18 @@
+// Design Patterns
+
+1) Factory Pattern
+	-- Used to get Objects when requested rather than hardcoding them in our class.
+
+2) Builder Design Pattern
+	-- In case if a Phone class has a constructor with 5 args (os, price, battery, model, etc). The user may not be interested in giving all these details.
+	   He might just want a phone with Android/IOS. In this case we cant use Phone class just by giving OS details, it will throw error if we dont provide info for other args
+	   eg) Phone ph = new Phone("IOS", , , ,);	// C.T Error
+	-- Here, we can create a separate class called PhoneBuilder and provide exact same data members in Phone class and provide setters for that with a return type of PhoneBuilder (this)
+	   And additionally we will have a method called getPhone() where we craete Phone object and return it
+	   eg) public Phone getPhone() { Phone ph = new Phone(os, price, battery, etc); return ph; } the args are already present in PhoneBuilder class
+	-- So in main class we can call like this,
+	   eg) Phone ph = new PhoneBuilder.setOs("Android").getPhone();
+		   sysout(ph);	// O/p:-> Android, and others will be default value since they are not provided
+
+3) Adapter Pattern
+	-- Here we have a 
