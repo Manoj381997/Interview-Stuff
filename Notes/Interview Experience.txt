@@ -18,3 +18,35 @@ Advs :->	Two heads are better than one. If the driver encounters a hitch with th
 			An effective way to share knowledge. ...
 			Develops your staff's interpersonal skills.
 
+7) Prefilter and post filter
+
+8) Sql(Joins) and MongoDB
+
+9) Maps and ConcurrentMap
+
+10) All Http methods will return a response. I mean though GET is used to fetch info, POST, PUT, DELETE will execute some business logic and will return some response
+
+// Programs
+1) reverse a string without reversing special chars
+
+int r = str.length - 1, l = 0; 
+
+// Traverse string from both ends until 'l' and 'r' 
+while (l < r) 
+{ 
+	// Ignore special characters 
+	if (!Character.isAlphabetic(str[l])) 
+		l++; 
+	else if(!Character.isAlphabetic(str[r])) 
+		r--; 
+
+	// Both str[l] and str[r] are not spacial 
+	else 
+	{ 
+		char tmp = str[l]; 
+		str[l] = str[r]; 
+		str[r] = tmp; 
+		l++; 
+		r--; 
+	} 
+} 

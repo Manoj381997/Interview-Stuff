@@ -27,6 +27,9 @@ eg) System.arraycopy(source_arr, sourcePos, dest_arr, destPos, len);
 5) float -> double
 6) double -> nothing
 
+63) What is the difference between aggregation and composition?
+Aggregation represents the weak relationship whereas composition represents the strong relationship. For example, the bike has an indicator (aggregation), but the bike has an engine (composition).
+
 // Covariant return type	(Java doesn't allow the return type based overloading but JVM always allows return type based overloading)
 
 //Constructor Chaining is nothing but using this() keyword to call a different constructor from a constructor

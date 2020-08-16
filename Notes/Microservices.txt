@@ -7,5 +7,105 @@ For eg) If we have 5-10 microservices, each one can have many instances to handl
 1) Finding the Boundaries
 2) Config. Management
 3) Dynamic Scale Up and Scale Down (loads may differ, depending on it we need to create that many instances. All this with Dynamic Load Balancing)
-4) Visiblity (If bug or any issue occurs we need to know where excatly it occured, which microservice and also we need to be able to monitor 100's of microservices)
+4) Visibility (If bug or any issue occurs we need to know where excatly it occured, which microservice and also we need to be able to monitor 100's of microservices)
 5) Pack Of cards (if not well designed, it will be a pack of cards) There would be a certain microservice that would be fundamental for everything, coz all others may depend on it or built on top of it.Thats why its a pack of cards(built on one another). If it goes down and then everything might go. So we shud have Fault Tolerance
+
+// Spring Cloud
+Spring Cloud provides tools for developers to quickly build some of the common patterns in distributed systems (e.g. configuration management, service discovery, circuit breakers, intelligent routing, micro-proxy, control bus, one-time tokens, global locks, leadership election, distributed sessions, cluster state).
+There are wide Variety of projects under Spring Cloud;
+-- Spring Cloud Netflix (Integration with various  Netflix OSS Components - Eureka, Hystrix, Zuul, Archaius, etc)
+-- Zookeeper, Cluster
+-- Spring Cloud Config
+-- Spring Cloud Bus (for linking services and service instances together --> API Gateway)
+
+// One of the challeges in Microservices is Config. Management
+-- Lets say there are n microservices with multiple environments for each of these microservices and multiple instances in many of those environments. This means there is lot of conf. that the operations teams need to manage.
+Spring Cloud Config Server, provides an approach where we can store all configuration for all the diff env's for all the microservices in a git repository. So this implies that we can store all the conf in one place, in a centralized location and spring cloud config server can be used to expose that configuration to all microservices. This makes it easy to manage all config's
+
+// The next challege is Dynamic Scale Up and Down
+	-- Naming Server (Eureka)					-- All the instances of all Microservices would register with the Naming Server
+		-> Two important feature	
+			-- Service Registration (All microservices can register here)
+			-- Service Discovery (Provides the microservice how many "other" specific microservice are there
+				eg) say we have a CurrencyCalculationService which asks the Naming Server how many CurrencyExchangeService instances are there
+	-- Ribbon (Client Side Load Balancing)
+	-- Feign (Easier REST Clients)
+
+// Visibility and Monitoring
+-- Zipkin Distributed Tracing
+	Spring Cloud Sleuth provides Spring Boot auto-configuration for distributed tracing.
+	we would use Spring Cloud Sleuth to assign ID to a request across Multiple components and we would use Zipkin Distributed tracing to trace a request across multiple components
+-- Netflix API Gateway
+	All these microservices will have lot of common features like logging, security, analytics, etc
+	we dont need to implement all these common features in every microservice. SO we use API Gateway, which provides solutions to these challenges
+	Eg) of API Gateway is Netflix Zuul API Gateway and we could use Fault Tolerance using Hystrix If a service is down. Hystrix helps us to configure a default response if a service is down
+
+// Adv of Microservices
+	-- Adaption of new technology
+	-- Dynamic Scaling (based on the load we can scale them up and down depending on the load)
+	-- faster Release cycles (since they are smaller components, it is easier to release microservices compared to monolithic)
+
+
+Each microservice could have n environments like, 1 dev env, 2 QA env, 1 stage env and 1 prod env else if a specific microservice has too much load on it then it might have 4 prod env
+And some of these env's may have multiple instances of same microservices
+And managing config for each appln of each env is a very very difficult thing and thats where centralized config comes into picture.
+-- So we put all those config in a git repository and spring cloud config Server would take care of managing the config and providing it to the specific microservice
+
+
+
+// @ConfigurationProperties
+	-- we can use this to fetch values from property file
+	
+If we want to make our microservice to not get info from our application.properties and want to fetch configs from spring cloud config server, we need to rename our application.properties to bootstrap.properties
+
+spring.profiles.active=dev/qa/stage/prod
+
+In properties file, in dev or any other env other than the default one. If one change is not specified in other (dev,qa,stage,prod) env then it takes default env values. But in order to do so the property file of other env shud be committed in git
+
+// Feign
+	-- Easier to consume other microservices
+	-- It provides integration with Ribbon which is a client side load balancing framework
+	
+When creating a proxy to communicate with a micro service, we use @FeignClient(name = "currency-exchange-service", url = " ")
+	The name attribute shud be the same as the micro service as when we start to use Naming server, at that time it will be covenient and very important
+	
+// Ribbon
+We are using Feign to talk to microservice, but it only talks with one instance of an environment. But to make it to talk all instances.. I mean to distribute the load to all instances we use Ribbon
+
+// Naming Server
+A microservice may have any number of servers/instances and it wont be convenient for us to change/add urls in our application.properties file. Or maybe some time later there may be a change in url and that has to be modified in the corresponding microservice which calls that microservice. So to avoid this fuss we are using Naming Server
+	-- All the instance of microservices register with Naming Server. Whenever an instance of a microservice comes up it would register with Naming Server. This is called Service Registration
+	-- Whenever a service wants to talk to another service lets say CurrencyCalculationService wants to talk to CurrencyExchangeService, it would talk to the Naming Server and ask what are the instances of the CurrencyExchangeService that are currently running. This is called Service Discovery. So the CurrencyCalculationService is asking for Naming Server for location/instances of CurrencyExchangeService
+	
+// API Gateways
+	-- Common features across microservices
+-- Authentication, Authorization, Security
+-- Rate Limits	(For a specific client we might want to allow certain no of calls per hour/day)
+-- Fault Tolerance	(If a service is that a microservice is dependent on, and if it goes down then that microservice shud be able to give some default response)
+-- Service Aggregation (Say like there external consumer who wants to call 15 diff services as part of one process, its better to aggregate those services and provide one service)
+	-- Zuul API Gateway
+	-- To make the url to go through the API Gateway, http://localhost:8765/{application-name}/{uri}
+	For eg) For CurrencyExchangeService the uri is http://localhost:8000/currency-exchange/from/USD/to/INR
+	For API Gateway,
+		http://localhost:8765/currency-exchange-service/currency-exchange/from/USD/to/INR
+Always while running microservices, first Naming Server shud be started, then the services and at last API Gateway
+
+// Distributed Tracing
+	If any trouble is there in any specific request, then i that case we would use a tracing tool. like Spring Cloud Sleuth.
+	We would assign a unique ID to a request. This is done by Sleuth.
+	Zipkin is a distributed tracing system, All the logs from all services we would put it in a MQ, we would use Rabbit MQ and we would send it out to zipkin server where it is consolidated and we would be able to look through diff requests and find what happened with specific request
+
+To bring all the logs in individual microservice, I mean in a central location so that we wont need to trace the request ID individually in all microservices
+	Some of the variety of sloutions for centralized logging are;
+	-- ELK Stack --> Elastic Search, Logstash, Kibana
+	-- Zipkin Distributed Tracing Server
+	
+// RabbitMQ
+	All the microservices will put their logs in RabbitMQ and Zipkin will be listening on it and will be pulling out the logs from MQ
+	-- Zipkin Server is connected to a db
+	-- To install RabbitMQ we would need Erlang
+	
+// Spring Cloud Bus
+
+
+// Fault Tolerance with Hystrix

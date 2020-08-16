@@ -27,3 +27,8 @@ I developed a full feature for them to filter those info based on their requirem
 
 I developed a separate feature for providing endpoints for (**) where I had to create relevant classes to map the values along with some security features since this feature was not available to few customers.
 The DB follows Star database
+
+
+
+why do you want to switch your job???
+	-- Currently I'm not doing a Full Stack Role, So I'm expecting to get some exposure on that and parallely expecting to work on some edge technologies like ReactJS, Mongo, Cassandra etc

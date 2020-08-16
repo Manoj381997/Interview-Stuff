@@ -162,6 +162,14 @@ Here if we notice In every mapping method, we need to do these steps but it can 
 @Query("from alien where tech=?1 orderby name")			// 1 means 1st parameter, we could provide n number of parameters there and it starts from 1
 List<Alien> findByTechSorted(String tech);
 
+// myBatis (Not an ORM)
+-- It Maps Objects to queries
+
+// CommandLineRunner (Interface)
+	-- These are typically executed when the Spring Context launches up. Which means whenever the application launches the code in the CommandLineRunner executes
+	-- Once a class implements CommandLineRunner, we need to override run() method
+	
+	
 // Richardson Maturity Model	(Best Practices for Restful Services)
 3 diff levels:
 1) Level 0 - Exposing SOAP Web services in rest style. Eg) http://server/getPosts , /deletePosts, /doThis

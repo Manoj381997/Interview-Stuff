@@ -1,5 +1,11 @@
 // Spring Security
 
+// Common Securing Threats
+-- Cross-site scripting
+-- SQL Injection
+-- Denial of service attack
+-- Cross-site request forgery
+
 // Spring Security is meant for Application Security, providing login/logout functionality and provides certain privileges
 
 Handles vulnerabilities
@@ -113,6 +119,14 @@ so we need to create ldap-data.ldif file in resources and  copy paste the code f
 so the 3rd property starts from right to left, org is the root node, and then comes springframework. These will map to the ldap-data.ldif. that org and springframework can be anything related to what we have given in our ldif file
 
 // JWT (JSON Web Token)	For Securing Web applns and for Microservices
+
+3 parts:-	All are encoded by base64
+1) Header			--> {"alg": "HS256", "typ": "JWT" }
+2) Payload/Subject	--> contains user info
+3) Signature		--> contains secret key (256 bit secret)
+
+https://medium.com/jspoint/so-what-the-heck-is-jwt-or-json-web-token-dca8bcb719a6
+
 JWT focussed on Authorization
 
 Authorization Strategies (2 popular options  where web applns use to remember sessions)

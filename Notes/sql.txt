@@ -1,0 +1,8 @@
+// find the employee with the Nth highest salary from the table
+	1) Find the employees with top N distinct salaries.
+	2) Find the lowest salary among the salaries fetched by the above query, this will give us the Nth highest salary.
+	3) Find the details of the employee whose salary is the lowest salary fetched by the above query
+SELECT * FROM Employee WHERE sal = 
+(
+	SELECT MIN(sal) FROM Employee WHERE  sal IN ( SELECT DISTINCT TOP N sal FROM Employee ORDER BY sal DESC )
+)
