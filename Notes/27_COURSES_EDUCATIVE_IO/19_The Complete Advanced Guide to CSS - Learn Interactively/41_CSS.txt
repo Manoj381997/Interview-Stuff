@@ -1,0 +1,144 @@
+
+
+
+      /*============================
+      1. Underline the h1 heading.
+      Tip: You can include an underline by writing: `text-decoration: underline`.   
+
+      However, I have used a border to achieve a more flexible effect. 
+      The spacing between the underline and header may be tweaked using padding. 
+			Uncomment the padding declaration below to see the result.
+      =============================*/
+      h1 {
+        border-bottom: 1px solid rgba(224,224,224 ,1);
+        /*padding-bottom: 15px; */
+      }
+
+      /*============================
+      2. Remove the large gap between the h1 element and the following paragraph
+
+      Tip: To remove all space between a heading and the paragraph that follows it, 
+ 			you must remove the bottom margin from the heading as well as the top margin from the paragraph
+
+      =============================*/
+      h1 {
+        margin-bottom: 0
+      }
+
+      h1 + p {
+        margin-top: 0
+      }
+			/*
+				what on earth is the "+"? It is called the adjacent sibling combinator. I intentionally used it here
+				so i get a chance to explain it to you. 
+				The adjacent sibling combinator (+) matches the second 
+				element only if it immediately follows the first element
+
+				In this example, it will match every paragraph, "p" that comes immediately after an "h1" element. 
+			*/
+
+      /*============================
+      3. Target the ".highlight" class and Highlight the text. Give it a yellow highlight.
+
+      Tip: The highlight is basically just a yellow background color. 
+			It is common for websites to highlight important items on a page. 
+      =============================*/
+      .highlight {
+        background-color: yellow
+      }
+
+      /*============================
+      4. Target the ".justify" class and justify the text i.e make the text flush with both 
+			margins - left and right.
+      Tip: when you justify text, the left and right margins of the text is aligned. 
+      The `text-align` property controls the alignment options for texts in general. 
+
+			The values the `text-align` property can take include: 
+       (i) right
+       (ii) left
+       (iii) center
+       (iv) justify
+      Try them out! 
+
+      Justifying a text can be easily achieved using CSS like so: 
+      =============================*/
+      .justify {
+        text-align: justify 
+      }
+
+
+      /*============================
+      5. Target the ".center" class and center the text with the text-align property.
+      =============================*/
+      .center {
+        text-align: center
+      }
+
+      /*============================
+      Target the ".caps" class and make the text appear in capital letters ONLY!
+      TIP: Sometimes you want to draw attention by making the text all capital letters. 
+
+			There's a css property for that! It is called ``text-transform`
+      The values it can take include: 
+        (i) uppercase
+        (ii) lowercase
+        (iii) none
+        (iv) capitalize 
+      Try them out!!
+      =============================*/
+
+
+      .caps {
+        text-transform: uppercase;
+        color: rgba(55,71,79 ,1)
+      }
+
+      /*============================
+      7. Target the ".indent" class and indent the text.
+      Tip: Indenting text in CSS isn't as hard as you think. 
+			If you tried to use margins or padding to force a space, that's not going to work. 
+			Use the `text-indent` property, and give it a length value like so:
+      =============================*/
+
+      .indent {
+        text-indent: 2em
+      }
+
+      /*============================
+      8. Target the ".drop-cap" class and give it a drop cap effect. 
+
+			The solution is simple. Target the first letter and style it differently.
+      =============================*/
+
+      .drop-cap:first-letter {
+        font-weight: bold;
+        font-size: 300%;
+        line-height: 1;
+        float: left; /* uncomment this to see the effect */
+        width: 0.9em;
+      }
+
+      /*============================
+      9.Target every link in the document, and ...
+          ->  give them a color of "DarkBlue" and a bold size EXCEPT the link in the 
+							".no-link" class. Give it a color of red
+          ->  change the color of the link when the cursor moves over it
+      =============================*/
+      
+		  a {
+        color: darkblue;
+        font-weight: bold
+      }
+      .no-link a {
+        color: red
+      }
+
+      /*============================
+      10. Also, on hover change the color of the links when the cursor moves over it to 'teal'
+      =============================*/
+      a:hover,
+      .no-link a:hover {
+        color: teal
+      }
+
+

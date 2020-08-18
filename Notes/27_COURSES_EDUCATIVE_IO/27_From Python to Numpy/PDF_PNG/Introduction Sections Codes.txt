@@ -1,0 +1,18 @@
+Object Oriented Approach Codes:- https://repl.it/@jordanjordms3/Object-Oriented-Approach
+
+Procedural Approach -- https://repl.it/@jordanjordms3/Procedural-Approach
+
+Vectorized Approach - 1. Itertools  ---   https://repl.it/@jordanjordms3/Vectorized-Approach-1-Itertools
+
+Vectorized Approach - 2. Numpy --  https://repl.it/@jordanjordms3/Vectorized-Approach-2-Numpy
+
+Readability vs. Speed -- https://repl.it/@jordanjordms3/Readability-vs-Speed
+
+
+Anatomy Of an Array :-
+
+Introduction-- https://repl.it/@jordanjordms3/Anatomy-of-an-Array-introductions
+
+Views And Copies -- Temporary copy  -- https://repl.it/@jordanjordms3/Viewsand-Copies-Temporary-copy
+
+Solution Review --- https://repl.it/@jordanjordms3/Anatomy-of-an-Array-Solution-Review
