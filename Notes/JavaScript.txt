@@ -191,7 +191,7 @@ function show() {
 	var global = "hello"		// shadowing happens here
 }
 show();
-console.log(global)
+console.log(global)			// hi
 
 // Template Literals
 let one = 1;

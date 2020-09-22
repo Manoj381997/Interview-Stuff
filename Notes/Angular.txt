@@ -156,7 +156,7 @@ ngOnDestroy()
 eg) <input type="text"> - Here, type is an attribute which cannot be changed but text is a ppty which can be altered
 
 // JWT (JSON Web Token)
-header.payload.signature - xxxx.yyyyy.zzzzz (hashing alg is used) payload - is the data stored in JSON Web token. It actually had=s user ID inside the payload., Signature - for verifying the token
+header.payload.signature - xxxx.yyyyy.zzzzz (hashing alg is used) payload - is the data stored in JSON Web token. It actually has user ID inside the payload., Signature - for verifying the token
 
 // For generating JWT
 jwt.sign(payload, secretOrPrivateKey, [options, callback])

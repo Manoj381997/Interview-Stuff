@@ -37,6 +37,12 @@ https://dzone.com/articles/global-exception-handling-with-controlleradvice
 Others --
 	@Future, @Null, @Pattern - the request shud match the validation pattern we provided, @Max, @Min
 
+
+@NotNull(message = "Name cannot be null.") 
+private String name;
+
+	@NotBlank name cannot be null and must contain at least non-whitespace one character or if we use @NotEmpty annotation name cannot be null and name.length() > 0. So it can accept a String that has whitespace character.
+
 handleMethodArgumentNotValid()	-- For Exception response status during violation in constraints that we have provided above using @Valid
 So here we need to send info regarding the violated msg, for eg if name is given less than 2 size then we need to send a msg regarding that and the request which has to thrown is HttpStatus.BAD_REQUEST
 

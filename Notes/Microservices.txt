@@ -1,5 +1,13 @@
 // Micro Services
 
+// DRY (Dont Repeat Yourself)
+
+// Test Pyramid (Kind of automated tests required for s/w development)
+	3 levels in Test Pyramid
+	1) Unit tests
+	2) Service Tests
+	3) UI or End-to-End Tests
+
 Small Autonomous systems which communicate with each other via REST (HTTP protocols) which are deployed in Cloud
 For eg) If we have 5-10 microservices, each one can have many instances to handle request
 
@@ -88,10 +96,11 @@ A microservice may have any number of servers/instances and it wont be convenien
 	For eg) For CurrencyExchangeService the uri is http://localhost:8000/currency-exchange/from/USD/to/INR
 	For API Gateway,
 		http://localhost:8765/currency-exchange-service/currency-exchange/from/USD/to/INR
+
 Always while running microservices, first Naming Server shud be started, then the services and at last API Gateway
 
 // Distributed Tracing
-	If any trouble is there in any specific request, then i that case we would use a tracing tool. like Spring Cloud Sleuth.
+	If any trouble is there in any specific request, then in that case we would use a tracing tool. like Spring Cloud Sleuth.
 	We would assign a unique ID to a request. This is done by Sleuth.
 	Zipkin is a distributed tracing system, All the logs from all services we would put it in a MQ, we would use Rabbit MQ and we would send it out to zipkin server where it is consolidated and we would be able to look through diff requests and find what happened with specific request
 

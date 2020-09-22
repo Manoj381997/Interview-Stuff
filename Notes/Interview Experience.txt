@@ -6,7 +6,7 @@
 
 3) Diff b/w Web Service and Restful service
 
-4) How an endpoint is authenticated and authorized
+4) How an endpoint is authenticated and authorized	--> antMatchers
 
 5) How do we validate when there is an issue in an endpoint
 
@@ -25,6 +25,79 @@ Advs :->	Two heads are better than one. If the driver encounters a hitch with th
 9) Maps and ConcurrentMap
 
 10) All Http methods will return a response. I mean though GET is used to fetch info, POST, PUT, DELETE will execute some business logic and will return some response
+
+11) Singleton and Doubleton Implementation
+
+12) Producer-Consumer solution using threads in Java
+
+13) What are the best real life example for explaining different OOP concepts in any programming language? (Quora)
+	https://www.c-sharpcorner.com/UploadFile/a8024d/real-life-example-of-oops/
+
+14) @EnableAutoConfiguration
+
+15) In abstract, when extending abstract class, to avoid implementing methods we can make subclass as abstract itself
+
+16) Good to learn JDBC and Hibernate
+
+17) How do you break singleton https://www.geeksforgeeks.org/prevent-singleton-pattern-reflection-serialization-cloning/
+
+18) Delete a Node from linked list without head pointer (Fast solution is to copy the data from the next node to the node to be deleted and delete the next node. Something like following)
+soln) 
+list.deleteNode(head);
+	(OR)
+// Delete 15 without sending head 
+Node* del = head->next; 
+deleteNodeWithoutHead(del);
+
+void deleteNode(Node node) { 
+	Node temp = node.next; // Save next node
+	node.data = temp.data; // Copy next node's value to the current yet to be deleted node
+	node.next = temp.next; // direct the next pointer of current node to next node's next pointer
+} 
+// Note: This solution doesn’t work if the node to be deleted is the last node of the list. To make this solution work we can mark the end node as a dummy node.
+// Also try for Doubly linkedlist
+
+19) Consider the following tables:
+
+Student - Stid, Stname, Details
+Subject - Subid, Subname
+Marks - Stid, Subid, mark 				Write a query to print the list of names of students who have scored the maximum mark in each subject.
+	soln)
+		You just have to partition the problem into some bite-sized steps and solve each one by one
+
+		// First, get the maximum score in each subject:
+
+		select SubjectID, max(MarkRate)
+		from Mark
+		group by SubjectID;
+
+		// Then query who are those that has SubjectID with max MarkRate:
+
+		select SubjectID, MarkRate, StudentID
+		from Mark
+		where (SubjectID,MarkRate)
+		in
+		  (
+		  select SubjectID, max(MarkRate)
+		  from Mark
+		  group by SubjectID
+		  )
+		order by SubjectID, StudentID;
+		
+		// Then obtain the Student's name, instead of displaying just the StudentID:
+		
+		select SubjectName, MarkRate, StudentName
+		from Mark
+		join Student using(StudentID)
+		join Subject using(SubjectID)
+		where (SubjectID,MarkRate)
+		in
+		  (
+		  select SubjectID, max(MarkRate)
+		  from Mark
+		  group by SubjectID
+		  )
+		order by SubjectName, StudentName
 
 // Programs
 1) reverse a string without reversing special chars
@@ -50,3 +123,109 @@ while (l < r)
 		r--; 
 	} 
 } 
+
+2) Reverse and Add Function
+3) Logic to count nodes in a Circular Linked List
+4) Balance Array
+5) Smallest subarray with sum greater than x
+6) Find Mean and Median of array
+7) MinStack
+
+// Doubleton Pattern
+public class Doubleton{
+    private static Doubleton objDoubleton1;
+    private static Doubleton objDoubleton2;
+    private Doubleton(){
+    }
+    
+    // Factory Method
+    public  static Doubleton getInstance(){
+        if(objDoubleton1 == null){
+            objDoubleton1 = new Doubleton();
+      return objDoubleton1;
+        }
+        else if(objDoubleton2 == null){
+            objDoubleton2 = new Doubleton();
+      return objDoubleton2;
+        }
+        else{
+           if(Math.random() < 0.5)
+          return objDoubleton1;
+           else
+          return objDoubleton2;
+        }
+    }
+    // override clone method
+    public  Object clone(){
+        return this;
+    }
+}
+
+// OO Design
+"OO model for lift system", "OO model for chess"
+You should be able to use interfaces, static classes etc. pretty well.
+	1) Tic-Tac-Toe game
+	2) A seating arrangement was to be designed for airplane management system
+	3) To display the day of week after adding/subtracting a number from a day.
+		Example : “ Monday +3” should give Thursday. “Monday -3” should give Friday.
+		["Monday", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"] --> with this we can find index of day and then we can add/subtract based on input number and operand
+	4) Make a snake and ladder game.
+	5) calculate Taxi fare like Ola/Uber does (different prices for all vehicle like mini, sedan, SUV ), they had given all the formulations according to which we have to develop a code, they give us approx 2 hours
+	6) Sales Tax Problem
+	7) Mars Rover Problem
+	8) IPOD Inventory
+	
+https://dev.to/techdebtor/get-hired-handling-object-oriented-design-questions-4i70
+https://dzone.com/articles/21-object-oriented-and-system-design-problems-to-p
+https://www.codeblah.com/airline-reservation-system-in-java/
+	
+Technical interview 1
+
+Which language u prefer c or java? Why?
+Questions on project
+Write code for merge sort and simulate on array?
+Questions on collections java and implementation
+Explain Sudoku backtracking algorithm
+Design rat in maze problem in oops
+Design fan in oops
+Design Hit counter
+Questions on hashing
+Osi model and function of each layer with some examples
+Database normalization explain 2nf 3nf bcnf with examples
+Schema design for students course and department and asked to write some queries
+
+Technical interview 2
+
+Features of java and when to use c instead of java
+Write code to reverse doubly linked list and simulate with examples
+Create tree form 2 traversals
+Code to detect loop in linked list and solution to remove it
+What happens when u type google.com
+Design student subjects schema
+Questions on Array and Linked list and their usage
+Questions on implementation of Collections
+Questions on garbage collector in java
+Some questions on project
+Code for finding tree height ,diameter
+
+Interview on leadership
+
+Started with introduction
+Questions on hobby
+then on coding why do u like coding
+design internal email system for thoughtworks
+questions on complexity of algorithms
+questions on thoughtworks
+tell some negative points of thoughtworks
+
+then given 3 points 1 leadership 2 hard work 3 helped someone he gave me 5 minutes to think
+
+Interview on three pillars of thoughtworks
+
+Started with introduction
+Asked some questions events I managed
+Asked current affairs
+Asked Opinion on caste based reservation ,
+suicide of farmers and solution to these problem
+responsibility towards society
+what is goal and career objective

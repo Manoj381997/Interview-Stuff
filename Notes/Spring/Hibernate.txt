@@ -12,6 +12,14 @@ connection URL -> jdbc.mysql://localhost:8080/db-name
 username -> -----
 password -> -----
 
+// What are the core interfaces/components of Hibernate?
+The core interfaces/components of Hibernate framework are:
+Configuration
+SessionFactory
+Session
+Query
+Criteria
+Transaction
 
 //
 Configuration con = new Configuration().configure().addAnnotatedClass(Person.class)

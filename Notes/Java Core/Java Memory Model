@@ -1,0 +1,75 @@
+
+// Out of order execution
+Performance driven changes done by compiler, JVM or CPU
+
+// Field Visibility
+In presence of multiple threads a.k.a Concurrency
+To avoid this, it uses volatile, so that it is flushed to main memory
+
+JMM (Java Memory Model) is a specification which guarantees visibility of fields (aka happens before) amidst reordering of instructions
+
+// Happens-Before relationship
+
+public class VolatileFieldsVisibility {
+	int a = b = c = 0;
+	volatile int x = 0;
+	
+	public void writerThread() {
+		a = 1;
+		b = 1;
+		c = 1;
+		
+		x = 1;	// write of x
+	}
+	
+	public void readerThread() {
+		int r2 = x;
+		
+		int d1 = a;
+		int d2 = b;
+		int d3 = c;
+	}
+}
+
+Here, JMM has standard rules, where "whatever happens before write of before x should be visible and updated to any other thread after it has read x".
+This concept and rule is applicable to;
+1) Synchronized
+2) Locks
+3) COncurrent collections
+4) Thread operations (join, start)
+
+final fields (special behaviour)
+
+
+The above example without volatile keyword for variable x; we write like this
+
+synchronization shud happen on object, so we r using this;
+
+synchronized(this) {										or we can perform on all the variables rather than relying on "Happens before"
+	x = 1;														synchronized(this) {
+}																	a = b = c = x = 1;
+																}
+and 
+
+synchronized(this) {
+	int r2 = x;
+}
+	
+// Same behaviour with Locks
+Lock lock = new ReentrantLock();
+
+	writerThread() {
+		lock.lock();
+		a = 1;
+		b = 1;
+		c = 1;
+		x = 1;
+		lock.unlock();
+	}
+	
+	readerThread() {
+		lock.lock()'
+		int r2 = x;
+		int d1 = a;
+		etc..
+	}

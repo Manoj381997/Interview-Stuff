@@ -16,3 +16,24 @@
 
 3) Adapter Pattern
 	-- Here we have a 
+	
+what design patterns have you used in your project?? (https://medium.com/educative/the-7-most-important-software-design-patterns-d60e546afb0e)
+1st ans:->
+	In my project I had used MVC, Singleton, Factory, Iterator and Template pattern.
+	The project divided into 3 section UI, Business, Data Access layer.
+	MVC Pattern: 		I had used at the presentation so model separated by controller.
+	Singleton Pattern: 	To share common data access throughout the application.
+	Factory Pattern: 	Between each layer for decoupling and centralizing object creation to avoid code complication.
+	Iterator Pattern: 	For Providing tight encapsulation through middle tier object.
+	Observer Pattern: 	For Sending notification to subscribed users.
+	Facade Pattern: 	For delegating client requests to appropriate subsystem objects eg. The consumer calls one number and speaks with a customer service representative. The customer service representative acts as a Facade, providing an interface to the order fulfillment department, the billing department, and the shipping department.
+	Template Pattern: 	For consistence vocabulary and naming convention for business objects.
+2nd ans:->
+	There are good design patterns and anti patterns. The patterns I use in my projects are
+
+	Singleton(Everybody says use singleton , Please don't use it for your databases,cache etc.., because singleton is an anti pattern in professional world for business logic. What is so bad about singletons? --> https://stackoverflow.com/questions/137975/what-is-so-bad-about-singletons)
+	MVC, MVVM
+	Strategy pattern
+	Factory pattern
+	Adapter pattern
+	Builder pattern

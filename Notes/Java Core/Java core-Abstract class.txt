@@ -43,6 +43,8 @@ So If there are common properties for many classes which inherit Abstract class,
 2) Marker interface (Interface without any method like Serializable, cloneable)
 3) SAM Interface (Single Abstract Method Interface) (a.k.a Functional Interface)
 
+After having default and static methods inside the interface, we think about the need of abstract class in Java. An interface and an abstract class is almost similar except that you can create constructor in the abstract class whereas you can't do this in interface.
+
 
 // stream() - lazy evaluation
 1) Intermediate methods

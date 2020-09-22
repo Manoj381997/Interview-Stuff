@@ -9,7 +9,7 @@ pom.xml -> Project Object Model (where we define configuartion for the project)
 contains prj info, dependencies, plugins
 
 Maven life cycle (mvn clean install)
-1) Validate
+1) Validate0
 2) Compile
 3) Test
 4) Package

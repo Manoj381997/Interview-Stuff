@@ -12,6 +12,8 @@ SomeBusinessImpl businessImpl = new SomeBusinessImpl(dataServiceMock);
 int result = businessImpl.findGreatestFromAllData();		// here, when findGreatestFromAllData invokes retrievAllData() mthd of dataServiceMock then our mock will return custom data
 assertEquals(24, result);
 
+https://stackoverflow.com/questions/14970516/use-mockito-to-mock-some-methods-but-not-others
+
 // @Mock, @InjectMocks, @RunWith
 
 @RunWith(MockitoJUnitRunner.class)	(OR)SpringRunner.class			// Need to use RunWith when we use annotations like Mock and InjectMocks
