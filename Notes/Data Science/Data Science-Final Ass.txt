@@ -1,0 +1,29 @@
+1)
+Data Scientist, is someone who often has a mathematics/physics/statistics or computer science background, who usually is involved in research activities, and has good computational skills, database knowledge irrespective of structured or unstructured data and moreover has good communication and presentation skills.
+Data Science, is basically manipulating preprocessed data in order to yield a specific result related to the problem.
+
+2)
+The industry I'm passionate about is Health care. Knowing that with the use of data science one can tend to predict future outcomes, then healthcare would be my first call. And Yes, I would definitely pursue a data science career in this domain/industry.
+
+3)
+Cover page
+Table of Contents (ToC)
+Abstract or Executive Summary
+Introductory
+Methodology
+Discussion
+Results
+Conclusion
+References
+Acknowledgement.
+
+Cover page
+Table of contents
+Introductory section
+Methodology section
+Results section
+Discussion section
+Conclusion section
+References
+Acknowledgment
+Appendix

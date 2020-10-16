@@ -1,0 +1,35 @@
+Speech to Text
+API Key: GSZyzGYETwFQtzxxrnut1IS5qxsVxUQX6IIROHF08UHb
+URL: https://api.us-south.speech-to-text.watson.cloud.ibm.com/instances/b9fbf235-62f4-4b75-9ee9-be8ddd719dc4
+
+Language Translator
+API Key: yG-j14DxMqoHLOKwTWZQgiF36DAy7uQ370tniZU-pkYm
+URL: https://api.us-south.language-translator.watson.cloud.ibm.com/instances/4110a181-f0ab-4b09-b488-6780e2fc5d56
+
+URL for Jupyter assignment: Course2 - week3
+https://dataplatform.cloud.ibm.com/analytics/notebooks/v2/2fc96fcf-35ed-4dc3-9ff5-869f32ee3cae/view?access_token=ecdd06e21ad763ef909cb69f65d610a1a75cf1f3fe18e43a20457d0eb8c432c2
+
+Dashboard URL: Course4- week5
+https://dataplatform.cloud.ibm.com/analytics/notebooks/v2/a642c800-5f2e-4b87-a494-29bd861722bd/view?access_token=52043409c6a08cd63e34a1bbfcdd112073f560a8e2cf96ac100aae01e2310a48
+
+House Sale URL: Course6- week6
+https://dataplatform.cloud.ibm.com/analytics/notebooks/v2/5ff2e6de-7630-45a2-a63e-2f3f2fddb5e3/view?access_token=bb44c91a1f639a4cc124f75161ac409620baa40399386546cb088b264f9d4364
+
+
+Database info:
+{
+  "db": "BLUDB",
+  "dsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50000;PROTOCOL=TCPIP;UID=jff17775;PWD=1d8+sddmvhhqkwwk;",
+  "host": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+  "hostname": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+  "https_url": "https://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+  "jdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+  "parameters": {},
+  "password": "1d8+sddmvhhqkwwk",
+  "port": 50000,
+  "ssldsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50001;PROTOCOL=TCPIP;UID=jff17775;PWD=1d8+sddmvhhqkwwk;Security=SSL;",
+  "ssljdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50001/BLUDB:sslConnection=true;",
+  "uri": "db2://jff17775:1d8%2Bsddmvhhqkwwk@dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+  "username": "jff17775"
+}
+

@@ -1,5 +1,12 @@
 // Spring REST (refer in28minutes)
 
+CORS	(Cross Origin Resource Sharing)
+In traditional applns, the client and the server would belong to same server. I mean backend would be connected to templates and views.
+But when it comes to restful services, we wont have a template/view, we just send data. So possibly client and server may not be in the same server and also might use a different port. And CORS is something which is validated by our browsers, if a request is received from a different server, by default it doesnt allow it, but whereas in restful services it snot the case, so we have to tell browser that this is a restful service, so you can allow it.
+It is a security mechanism enforced by the browser, so only the browser restricts whereas postman is just a testing tool. It simply doesnt care about CORS
+So thats why we override header so that the browser ignores that.
+
+
 @RestController is a convenience annotation that is itself annotated with @Controller and @ResponseBody.
 
 @PathVaraible	-- For URL	(/manoj)
@@ -27,6 +34,8 @@ After extending ResponseEntityExceptionHandler, we need to use method handleExce
 new ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not Authorized");	// 401 status
 new ResponseEntity.ok("Good " + time)								 		// 200 status
 new ResponseEntity.badRequest().body("time shud be morning or evening");	// 400 status
+// 422 status
+Unprocessable Entity response status code indicates that the server understands the content type of the request entity, and the syntax of the request entity is correct, but it was unable to process the contained instructions.
 If you use Content-Type as application/xml and this is not supported by your appln, Spring Boot by default returns a response status of 415 - Unsupported Media Type (Wrong Content Type)
 
 // ControllerAdvice

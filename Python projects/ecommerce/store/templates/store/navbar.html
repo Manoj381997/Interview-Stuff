@@ -1,0 +1,45 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark josefinFont">
+  <a class="navbar-brand" href="{% url 'home' %}">
+    <img src="{% static 'images/logo4.png' %}" height="45" width="45" />
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse small" id="navbarSupportedContent">
+
+    <ul class="navbar-nav mr-auto text-center">
+      <li class="nav-item">
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle nav-labels" href="#" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Categories
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Electronics</a>
+            <a class="dropdown-item" href="#">Clothes</a>
+            <a class="dropdown-item" href="#">Books</a>
+            <a class="dropdown-item" href="#">Furnitures</a>
+            <a class="dropdown-item" href="#">Games</a>
+            <a class="dropdown-item" href="#">Accessories</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item disabled" href="#">Miscellaneous</a>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-labels" href="{% url 'best-sellers' %}">Best Sellers</a>
+      </li>
+    </ul>
+    <div class="text-center">
+      <span class="nav-item username">
+        <a href="#">Jane Doe</a>
+      </span>
+      <span class="nav-item ml-3 mr-2 logout"><a href="#">LOGOUT</a></span>
+    </div>
+  </div>
+</nav>

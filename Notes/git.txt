@@ -1,0 +1,26 @@
+git commands:-->
+### 1. Clone your fork:
+
+    git clone git@github.com:YOUR-USERNAME/YOUR-FORKED-REPO.git
+
+### 2. Add remote from original repository in your forked repository: 
+
+    cd into/cloned/fork-repo
+    git remote add upstream git://github.com/ORIGINAL-DEV-USERNAME/REPO-YOU-FORKED-FROM.git
+    git fetch upstream
+
+### 3. Updating your fork from original repo to keep up with their changes:
+
+    git pull upstream master
+	
+
+### 4. Setting upstream of branch
+	git push --set-upstream origin [branch-name]
+
+### List all branches in remote
+	git branch -a
+
+Command for creating a branch using a PR
+ git fetch upstream pull/485/merge:US235766_SupportFilters && git checkout US235766_SupportFilters (Mostly wont work)
+ 
+ git fetch upstream pull/485/merge:pr/485 && git checkout pr/485  (485 -> PR Code)

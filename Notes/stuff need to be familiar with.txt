@@ -1,0 +1,5 @@
+three.js
+
+Prediction of song genre using song lyrics, traffic sign detection, basic books
+
+leaflet.js & here (https://developer.here.com/)

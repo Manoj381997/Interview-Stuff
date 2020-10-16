@@ -99,6 +99,11 @@ Marks - Stid, Subid, mark 				Write a query to print the list of names of studen
 		  )
 		order by SubjectName, StudentName
 
+20) You are given a date range (from, to). Assume you want to fetch records from db between this range, but since we have so many records it might take lot of time to fetch, instead of fetching records within the range, we could divide the range into small parts. Lets say from is 15/08/2000 and to is 24/12/2000
+We could divide this date range to multiple queries like, 15/08/2000 to 31/08/2000, 1/09/2000 to 30/09/2000, 1/10/2000 to 31/10/2000, 1/11/2000 to 30/11/2000, 1/12/2000 to 24/12/2000
+so from this range we could have multiple queries to retrieve data rather than fetching everything at once
+How do we do it??
+
 // Programs
 1) reverse a string without reversing special chars
 
