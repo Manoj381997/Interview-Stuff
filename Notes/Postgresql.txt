@@ -1,0 +1,1 @@
+Link for exporting scripts from tables: https://stackoverflow.com/questions/12815496/export-specific-rows-from-a-postgresql-table-as-insert-sql-script
